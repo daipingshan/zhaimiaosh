@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>京东免单</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="__API__/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="__API__/mui/css/app.css"/>
+    <style>
+        .title {
+            margin: 20px 15px 10px;
+            color: #6d6d72;
+            font-size: 15px;
+        }
+
+        .mui-table-view .mui-media-object {
+            line-height: 100px;
+            max-width: 100px;
+            height: 100px;
+        }
+
+        .jd-price {
+            font-size: 18px;
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .jd-title {
+            margin-top: 20px;
+        }
+
+        .logo {
+            width: 200px;
+            height: 200px;
+            margin: 50px auto;
+        }
+
+        input {
+            line-height: 50px;
+        }
+
+        .mui-input-group {
+            padding: 20px;
+        }
+        .mui-input-row, .mui-button-row {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<!--<header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">京东免单专场</h1>
+</header>-->
+
+<div class="mui-content">
+    <div class="mui-control-content mui-active" id="one">
+        <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+            <div class="mui-scroll">
+                <!--数据列表-->
+                <ul class="mui-table-view mui-table-view-chevron mui-table-view">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mui-control-content" id="two">
+        <div class="logo">
+            <img src="__API__/mui/image/logo.png" style="width: 200px;height: 200px">
+        </div>
+        <form class="mui-input-group">
+            <div class="mui-input-row">
+                <label>手机号</label>
+                <input type="text" name="mobile" placeholder="请输入免单手机号">
+            </div>
+            <div class="mui-input-row">
+                <label>订单号</label>
+                <input type="text" name="order_sn" placeholder="请输入京东订单号">
+            </div>
+            <div class="mui-button-row">
+                <button type="button" class="mui-btn mui-btn-primary" onclick="addSubsidyOrder()">确认</button>
+            </div>
+        </form>
+    </div>
+</div>
+<nav class="mui-bar mui-bar-tab">
+    <a class="mui-tab-item mui-active" href="#one">
+        <span class="mui-icon mui-icon-home"></span>
+        <span class="mui-tab-label">京东免单</span>
+    </a>
+    <a class="mui-tab-item" href="#two">
+        <span class="mui-icon mui-icon-gear"></span>
+        <span class="mui-tab-label">申请免单</span>
+    </a>
+</nav>
+</body>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="__API__/mui/js/mui.min.js"></script>
+<script>
+    $('#one,#two').css('height', window.screen.height - 50 + 'px');
+    mui.init({
+        swipeBack: true, //启用右滑关闭功能
+        pullRefresh: {
+            container: '#pullrefresh',
+            up: {
+                auto: true,
+                contentrefresh: '正在加载...',
+                callback: pullupRefresh
+            }
+        }
+    });
+
+    var page = 1;
+    var is_get = true;
+
+    function pullupRefresh() {
+        setTimeout(function () {
+            mui('#pullrefresh').pullRefresh().endPullupToRefresh(!is_get); //参数为true代表没有更多数据了。
+            var table = document.body.querySelector('.mui-table-view');
+            $.get("{:U('Jd/freeItems')}", {page: page}, function (res) {
+                var data = res.data;
+                var len = data.length;
+                if (len > 0) {
+                    if (len < 20) {
+                        is_get = false;
+                    }
+                    for (var i = 0; i < len; i++) {
+                        var li = document.createElement('li');
+                        li.className = 'mui-table-view-cell mui-media';
+                        li.innerHTML = '<a class="mui-navigate-right" data-url="' + data[i].click_url + '">' +
+                            '<img class="mui-media-object mui-pull-left" src="' + data[i].pic_url + '">' +
+                            '<div class="mui-media-body"><p class="jd-price">￥' + data[i].coupon_price + '</p><p class="mui-ellipsis jd-title">' + data[i].title + '</p></div></a>';
+                        table.appendChild(li);
+                    }
+                    page++;
+                } else {
+                    is_get = false;
+                }
+            }, 'json')
+        }, 1500);
+    }
+
+    mui('#pullrefresh').on('tap', 'a', function () {
+        mui.openWindow({
+            url: $(this).data('url')
+        })
+    })
+
+    function addSubsidyOrder() {
+        var mobile = $('input[name=mobile]').val();
+        var order_sn = $('input[name=order_sn]').val();
+        if (!mobile) {
+            mui.toast('请输入手机号！');
+            return false;
+        }
+        if (!order_sn) {
+            mui.toast('请输入订单号！');
+            return false;
+        }
+        $.post("{:U('addSubsidyOrder')}", {mobile: mobile, order_sn: order_sn}, function (res) {
+            mui.toast(res.msg);
+            if (res.code == 'success') {
+                $('input[name=order_sn]').val('');
+            }
+        }, 'json')
+    }
+</script>
+</html>

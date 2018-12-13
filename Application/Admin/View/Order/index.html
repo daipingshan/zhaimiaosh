@@ -1,0 +1,214 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="title" value="" placeholder="请输入商品标题"
+                       class="layui-input search_title">
+            </div>
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="order_sn" value="" placeholder="请输入订单编号"
+                       class="layui-input search_order_sn">
+            </div>
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="num_iid" value="" placeholder="请输入商品编号"
+                       class="layui-input search_num_iid">
+            </div>
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="mobile" value="" placeholder="请输入手机号码" class="layui-input search_mobile">
+            </div>
+            <div class="layui-input-inline"  style="width: 100px;margin: 10px 10px 0 0;">
+                <select name="status" class="layui-select search_status">
+                    <option value="">订单状态</option>
+                    <foreach name="status_arr" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline"  style="width: 150px;margin: 10px 10px 0 0;">
+                <select name="partner_id" class="layui-select search_partner">
+                    <option value="0">合作伙伴</option>
+                    <foreach name="partners" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline"  style="width: 158px;margin: 10px 10px 0 0;">
+                <select name="partner_id" class="layui-select search_platform">
+                    <foreach name="mall_platform" item="platform" key="k">
+                        <option value="{$k}">{$platform}</option>
+                    </foreach>
+                </select>
+            </div>
+
+            <div class="layui-input-inline"  style="width: 158px;margin: 10px 10px 0 0;">
+                <select name="date-type" class="layui-select date-type">
+                    <option value="0">日期类型</option>
+                    <option value="1">下单时间</option>
+                    <option value="2">结算时间</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="start_time" id="date-picker-start" value="" placeholder="开始时间"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="end_time" id="date-picker-end" value="" placeholder="结束时间"
+                       class="layui-input">
+            </div>
+            <a class="layui-btn search_btn" style="margin: 10px 10px 0 0;">查询</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="20%">
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col width="20%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">商品</th>
+                <th style="text-align:center;">订单编号</th>
+                <th style="text-align:center;">手机号码</th>
+                <th style="text-align:center;">订单状态</th>
+                <th style="text-align:center;">订单来源</th>
+                <th style="text-align:center;">金额相关</th>
+                <th style="text-align:center;">时间</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage','laydate'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery,
+                    laydate = layui.laydate;
+
+            var start = {
+                max: laydate.now(-1)
+                , istoday: true
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas //将结束日的初始值设定为开始日
+                }
+            };
+
+            var end = {
+                max: laydate.now(-1)
+                , istoday: true
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                }
+            };
+            document.getElementById('date-picker-start').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            };
+            document.getElementById('date-picker-end').onclick = function () {
+                end.elem = this;
+                laydate(end);
+            };
+
+            var index = 0;
+            getData(1);
+            function getData(page) {
+                var count = 0;
+                var data = [];
+                param = {
+                    title: $('.search_title').val(),
+                    order_sn: $('.search_order_sn').val(),
+                    num_iid: $('.search_num_iid').val(),
+                    mobile: $('.search_mobile').val(),
+                    status: $('.search_status option:selected').val(),
+                    partner_id: $('.search_partner option:selected').val(),
+                    mall_platform:$('.search_platform option:selected').val(),
+                    date_type: $('.date-type option:selected').val(),
+                    start_date : $('#date-picker-start').val(),
+                    end_date : $('#date-picker-end').val(),
+                    page: page
+                };
+
+                if (param.date_type!='0'){
+                    if (param.start_date == '' || param.end_date == ''){
+                        layer.msg('开始时间或结束时间未选');
+                    }
+                }
+                $.get('/Order/index', param, function (res) {
+                    data = res.info.data;
+                    count = res.info.count;
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData(1);
+            })
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td align="left">【编号】：<font style="color: #1AA094">' + data[i].num_iid +'</font><br />【平台】：'+data[i].mall_platform+'<br />【标题】：'+data[i].title+ '</td>'
+                                + '<td align="center">' + data[i].order_sn + '</td>'
+                                + '<td align="center">' + data[i].mobile + '</td>'
+                                + '<td align="center">' + data[i].pay_status_name + '</td>'
+                                + '<td align="center">' + data[i].source_name + '<br/><br/><font style="color:#f0ad4e">'+data[i].partner_name + '</font></td>'
+                                + '<td align="left">商品数量：' + data[i].item_num + '<br>付款金额：¥' + data[i].total_money + '<br>实际收入：¥' + data[i].commission + '</td>'
+                                + '<td align="left">下单：' + data[i].add_time + '<br/><br/>结算：' + data[i].settle_time + '</td>'
+                                + '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="7" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

@@ -1,0 +1,520 @@
+/*****样式开始*****/
+.tab {
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+
+.tab_con li {
+    float: left;
+    width: 33.3333%;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    text-align: center;
+    font-size: .3rem;
+    color: #2d2d2d;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.tab_con li a {
+    color: #2d2d2d;
+    display: block;
+}
+
+.tab_con li + li {
+    border-left: 1px solid #f2f2f2;
+}
+
+.tab_con li.active {
+    background: #f2f2f2;
+}
+
+.tab_con li.active a {
+    color: #2d2d2d;
+    display: block;
+}
+
+.perch_div {
+    width: 100%;
+    height: 1.1rem;
+}
+
+.content {
+    padding: .22rem .45rem 0 .55rem;
+    box-sizing: border-box;
+}
+
+.content_ul {
+    margin-bottom: .40rem;
+}
+
+.content_ul li {
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+.content_ul li + li {
+    margin-top: .2rem;
+}
+
+.con_list .discount {
+    padding-top: .45rem;
+    padding-right: .2rem;
+    height: 1.8rem;
+    background: url(../images/dis_bg.png) no-repeat center center;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+}
+
+.discount .money {
+    float: left;
+    width: 2rem;
+}
+
+.discount .money h2 {
+    display: block;
+    font-size: .36rem;
+    color: #fff;
+    text-align: center;
+    line-height: .8rem;
+}
+
+.discount h2 b {
+    font-size: .72rem;
+}
+
+.discount .money span {
+    display: block;
+    text-align: center;
+    font-size: .18rem;
+    color: #fff;
+    line-height: .18rem;
+}
+
+.title_text {
+    width: 3.45rem;
+    text-align: center;
+}
+
+.title_text h3 {
+    font-size: .36rem;
+    color: #ff0000;
+    line-height: .36rem;
+    margin-bottom: .25rem;
+}
+
+.title_text p {
+    font-size: .24rem;
+    color: #4d4d4d;
+    line-height: .24rem;
+    margin-bottom: .25rem;
+}
+
+.title_text span {
+    display: block;
+    font-size: .18rem;
+    color: #4d4d4d;
+    line-height: .18rem;
+}
+
+.code {
+    width: 1.06rem;
+    position: absolute;
+    right: 0;
+    top: .45rem;
+}
+
+.code a {
+    display: block;
+    width: .78rem;
+}
+
+.code a img {
+    display: block;
+    width: 100%;
+    margin-left: .08rem;
+}
+
+.code span {
+    display: inline-block;
+    font-size: .18rem;
+    color: #464646;
+    width: 110%;
+    text-align: left;
+    margin-left: .08rem;
+    margin-top: 0.1rem
+}
+
+.load_more {
+    font-size: .24rem;
+    color: #8f8f8f;
+    text-align: center;
+}
+
+.load_more a {
+    color: #8f8f8f;
+}
+
+/**弹窗**/
+.maxing {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 10;
+    background: #000;
+    opacity: .9;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+.window_open {
+    width: 5.42rem;
+    height: 8.35rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -2.71rem;
+    margin-top: -4.175rem;
+    z-index: 20;
+    display: none;
+}
+
+.code_tit {
+    height: 1.4rem;
+    width: 100%;
+    background: url(../images/code-tit.png) no-repeat center center;
+    background-size: 100% 100%;
+    padding-top: .5rem;
+    box-sizing: border-box;
+    margin-bottom: .36rem;
+}
+
+.code_tit .show_m {
+    width: 1.92rem;
+    text-align: center;
+    font-size: .48rem;
+    color: #fff;
+    line-height: .48rem;
+}
+
+.show_if {
+    font-size: .48rem;
+    width: 3.45rem;
+    color: #f00;
+    text-align: center;
+    line-height: .48rem;
+}
+
+.img_code {
+    width: 5.42rem;
+    height: 5.42rem;
+    background: #fff;
+    margin: auto;
+    padding: .1rem;
+    box-sizing: border-box;
+    margin-bottom: .25rem;
+}
+
+.img_code img {
+    width: 100%;
+    height: 100%;
+}
+
+.close {
+    text-align: center;
+}
+
+.close a {
+    display: inline-block;
+    width: .88rem;
+    height: .88rem;
+    background: url(../images/close-btn.png) no-repeat center center;
+    background-size: 100% 100%;;
+}
+
+.code_num {
+    text-align: center;
+    font-size: .48rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.maxing.active {
+    display: block;
+}
+
+.window_open.active {
+    display: block;
+}
+
+/**已使用**/
+.con_list_use .discount {
+    padding-top: .45rem;
+    padding-right: .2rem;
+    height: 1.8rem;
+    background: url(../images/use-bg.png) no-repeat center center;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+}
+
+.con_list_use .money {
+    float: left;
+    width: 2rem;
+}
+
+.con_list_use .money h2 {
+    display: block;
+    font-size: .36rem;
+    color: #fff;
+    text-align: center;
+    line-height: .8rem;
+}
+
+.con_list_use h2 b {
+    font-size: .72rem;
+}
+
+.con_list_use .money span {
+    display: block;
+    text-align: center;
+    font-size: .18rem;
+    color: #fff;
+    line-height: .18rem;
+}
+
+.con_list_use h3 {
+    font-size: .36rem;
+    color: #8f8f8f;
+    line-height: .36rem;
+    margin-bottom: .25rem;
+}
+
+.con_list_use .code span {
+    color: #dadada;
+}
+
+.code .flag-use {
+    position: absolute;
+    right: 0;
+    top: -.45rem;
+    width: 1.62rem;
+}
+
+/** 绑定手机号 **/
+.header {
+    width: 100%;
+}
+
+.header img {
+    width: 100%;
+}
+
+.content-box {
+    background-color: #fff;
+    padding: .6rem;
+}
+
+.content-box .input-group {
+    width: 90%;
+    margin-top: .2rem;
+    height: 1rem;
+}
+
+.content-box .input-group:first-child {
+    margin-top: 0;
+}
+
+.content-box .input-group .input-left {
+    float: left;
+    width: 15%;
+    text-align: center;
+}
+
+.content-box .input-group .input-left .username-logo {
+    background: url(../images/username-logo.png) no-repeat;
+    width: .6rem;
+    height: .6rem;
+    background-size: 100%;
+    display: block;
+    margin-top: .2rem;
+}
+
+.content-box .input-group .input-left .mobile-logo {
+    background: url(../images/mobile-logo.png) no-repeat;
+    width: .6rem;
+    height: .6rem;
+    background-size: 100%;
+    display: block;
+    margin-top: .2rem;
+}
+
+.content-box .input-group .input-left .code-logo {
+    background: url(../images/code-logo.png) no-repeat;
+    width: .6rem;
+    height: .6rem;
+    background-size: 100%;
+    display: block;
+    margin-top: .2rem;
+}
+
+.content-box .input-group .input-right {
+    float: right;
+    width: 80%;
+    line-height: 1rem;
+}
+
+.content-box .input-group .input-style input {
+    height: 30px;
+    border: 0 !important;
+    font-size: .3rem;
+    padding-left: .2rem;
+    padding-right: .2rem;
+    border-bottom: 1px solid #ff6666 !important;
+    width: 90%;
+    cursor: pointer;
+}
+
+.content-box .input-group .input-right.input-code {
+    float: left;
+    margin-left: 5%;
+    width: 40%;
+}
+
+.content-box .input-group .input-btn {
+    float: right;
+}
+
+.content-box .input-group .input-btn .get-code {
+    border: 1px solid #ff6666;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    height: 30px;
+    background-color: #fff;
+    color: #ff6666;
+    margin-top: .2rem;
+    padding: 0 .2rem;
+}
+
+.content-box .input-group.btn-box {
+    width: 60%;
+    margin: .5rem auto;
+}
+
+.content-box .input-group.btn-box button {
+    width: 100%;
+    height: 1rem;
+    background-color: #ff1515;
+    font-size: .35rem;
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #ff1515;
+    cursor: pointer;
+}
+
+.content-box .footer-box {
+    width: 95%;
+    margin: 0 auto;
+}
+
+.content-box .footer-box h3 {
+    font-size: .35rem;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1rem;
+}
+
+.content-box .footer-box p {
+    font-size: .26rem;
+    color: #999;
+    font-weight: 200;
+    line-height: .65rem;
+}
+
+/** 会员中心 **/
+.header-user {
+    width: 90%;
+    margin: .2rem auto;
+    position: relative;
+}
+
+.header-user img {
+    width: 100%;
+}
+
+.header-user h3 {
+    font-size: .4rem;
+    font-weight: 500;
+    line-height: .1rem;
+    color: #fff;
+}
+
+.header-user .name {
+    position: absolute;
+    top: 1.5rem;
+    left: .4rem
+}
+
+.header-user .mobile {
+    position: absolute;
+    top: 2.2rem;
+    left: .4rem
+}
+
+.content-user-box {
+    width: 90%;
+    margin: .2rem auto;
+}
+
+.content-user-box .icon-box {
+    padding: .5rem .1rem;
+    background: #fff;
+    text-align: center;
+    border-radius: .1rem;
+}
+
+.content-user-box .icon {
+    width: 25%;
+    float: left;
+}
+
+.content-user-box .icon img {
+    width: 80%;
+    text-align: center;
+}
+
+.content-user-box .icon h3 {
+    font-size: .26rem;
+    text-align: center;
+    margin-top: .2rem;
+    font-weight: 200;
+}
+
+.content-user-box .footer-box {
+    margin-top: 1rem;
+}
+
+.content-user-box .footer-box h3 {
+    font-size: .35rem;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1rem;
+}
+
+.content-user-box .footer-box p {
+    font-size: .26rem;
+    color: #999;
+    font-weight: 200;
+    line-height: .65rem;
+}
+
+
+
+
+

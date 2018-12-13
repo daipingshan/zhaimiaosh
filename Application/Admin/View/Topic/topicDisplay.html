@@ -1,0 +1,368 @@
+<extend name="Common/common"/>
+<block name="body">
+    <a class="layui-btn search_btn" style="margin-left: 10px;">点击选择商品</a>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>商品列表</legend>
+    </fieldset>
+    <div class="image-list" data-num="0" style="display:flex;width: 100%;flex-wrap: wrap;"></div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>专题</legend>
+    </fieldset>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">专题类型</label>
+            <div class="layui-input-block" style="position: relative;z-index: 999;">
+                <div style="width:20%;float:left">
+                    <select name="type" class="layui-select type"lay-filter="showItemDesc">
+                        <foreach name="type" item="row" key="k">
+                            <option value="{$k}" {$info['type']==$k?'selected':''}>{$row}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专题名称</label>
+            <div class="layui-input-block" style="width:50%">
+                <input type="text" name="topic_name" class="layui-input" value="{$info['topic_name']}"
+                       lay-verify="required" placeholder="请输入专题名称">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-item-pic">
+            <label class="layui-form-label">专题入口图</label>
+            <div style="float: left;">
+                <input type="file" name="file" class="layui-upload-file item-img"
+                       lay-ext="jpg|png|gif|jpeg">
+            </div>
+            <div style="float: left;margin-left: 20px">
+                <img src="{$info['topic_item_pic']}" width="150" height="217" class="topic_item_pic" style="display: {$info['topic_item_pic']!='' ?'block':'none'}">
+                <input type="hidden" name="topic_item_pic" class="topic_item_pic_value"
+                       value="{$info['topic_item_pic']}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专题详情图</label>
+            <div style="float: left;">
+                <input type="file" name="file" class="layui-upload-file detail-img"
+                       lay-ext="jpg|png|gif|jpeg">
+            </div>
+            <div style="float: left;margin-left: 20px">
+                <img src="{$info['topic_detail_pic']}" width="250" height="93" class="topic_detail_pic" style="display: {$info['topic_detail_pic']!=''?'block':'none'}">
+                <input type="hidden" name="topic_detail_pic" class="topic_detail_pic_value"
+                       value="{$info['topic_detail_pic']}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专题详情简介</label>
+            <div class="layui-input-block" style="width:50%">
+                <textarea type="text" name="topic_desc" class="layui-textarea" lay-verify="required"
+                          placeholder="请输入专题详情简介">{$info['topic_desc']}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">淘宝擎天柱物料ID</label>
+            <div class="layui-input-block" style="width:15%">
+                <input type="text" name="tbk_material_id" value="{$info['tbk_material_id']}" placeholder="不填表示使用上面自定义的商品" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">为0或不填表示使用上面选的商品。填了物料ID将只显示该物料里的商品</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block" style="width:10%">
+                <input type="text" name="sort" value="{$info['sort']}" placeholder="请输入专题排序" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" name="id" class="info-id" value="{$info['id']}"/>
+                <input type="hidden" class="info-items" value='{$info["items"]}'/>
+                <input type="hidden" class="info-type" value='{$info["type"]}'/>
+                <button class="layui-btn" lay-submit="" lay-filter="save-data">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="reset">重置</button>
+            </div>
+        </div>
+    </form>
+</block>
+<block name="box">
+    <div id="box" style="display:none;">
+        <blockquote class="layui-elem-quote news_search">
+            <div class="layui-inline layui-form">
+                <div class="layui-input-inline">
+                    <input type="text" value="" placeholder="请输入关键字" class="layui-input item-num-title">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="text" value="" placeholder="请输入商品编号" class="layui-input item-num-iid">
+                </div>
+                <div class="layui-input-inline">
+                    <select class="layui-select item-cate">
+                        <option>全部商品</option>
+                        <foreach name="cate" item="row" key="k">
+                            <option value="{$row.id}" >{$row.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select class="layui-select item-sort">
+                        <option>默认排序</option>
+                        <foreach name="sort" item="row" key="k">
+                            <option value="{$k}" >{$row}</option>
+                        </foreach>
+                    </select>
+                </div>
+                <a class="layui-btn item-search-btn">查询</a>
+            </div>
+        </blockquote>
+        <div class="item" style="float: left">
+            <div class="selectImgDiv" id="selectItemDiv"></div>
+            <div id="selectItemDivData" class="display:none"></div>
+        </div>
+        <div class="item" style="padding-left: 10px;">
+            <div id="page"></div>
+        </div>
+
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'upload', 'laypage'], function () {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                $ = layui.jquery,
+                laypage = layui.laypage,
+                upload = layui.upload;
+
+            /**
+             * 文件上传
+             */
+            upload({
+                elem: '.item-img',
+                url: '/Common/uploadImg'
+                , before: function () {
+                    index = layer.msg('上传中，请稍候', {icon: 16, time: false, shade: 0.8});
+                }
+                , success: function (res) {
+                    console.log(this);
+                    layer.close(index);
+                    layer.msg(res.message);
+                    if (res.state == 'SUCCESS') {
+                        $('.topic_item_pic').attr('src', res.url);
+                        $('.topic_item_pic').css('display','block');
+                        $('.topic_item_pic_value').val(res.url);
+                    }
+                }
+            });
+            upload({
+                elem: '.detail-img',
+                url: '/Common/uploadImg'
+                , before: function () {
+                    index = layer.msg('上传中，请稍候', {icon: 16, time: false, shade: 0.8});
+                }
+                , success: function (res) {
+                    layer.close(index);
+                    layer.msg(res.message);
+                    if (res.state == 'SUCCESS') {
+                        $('.topic_detail_pic').attr('src', res.url);
+                        $('.topic_detail_pic').css('display','block');
+                        $('.topic_detail_pic_value').val(res.url);
+                    }
+                }
+            });
+
+            //判断入口图
+            var info_type = $('.info-type').val();
+            if (!info_type || parseInt(info_type)==1){
+                $('.layui-form-item-pic').show();
+            }else{
+                $('.layui-form-item-pic').hide();
+            }
+
+            //编辑说时获取数据
+            var info_id = $('.info-id').val();
+            if (info_id) {
+                var items_string = $('.info-items').val();
+                if (items_string) {
+                    var items = JSON.parse(items_string);
+
+                    var html = '';
+                    $.each(items, function (i, n) {
+                        html += "<div data-num-iid='" + n.num_iid + "' style='margin: 15px 15px 0 0;width:200px;float:left;position: relative;box-shadow: 2px 2px 5px 0px black;'>";
+                        html += "<img src='" + n.image_url + "'   width='200' height='200'>";
+                        html += "<div class='item-title'><input type='text' class='layui-input' style='width:  90%;margin: 5%;' value='" + n.title + "'></div>";
+                        html += "<div class='item-sort'><input type='text' class='layui-input' style='width:  90%;margin: 5%;' value='" + n.sort + "' placeholder='请输入排序'></div>";
+                        html += "<div class='del-image' style='position: absolute;text-align: right;top: -7px;right: -7px;'><div class='close'></div></div>";
+                        html += "</div>";
+                        var num = $('.image-list').attr('data-num');
+                        $('.image-list').attr('data-num', parseInt(num) + 1);
+                    });
+                    $('.image-list').append(html);
+                }
+            }
+
+            // 搜索商品图
+            $("body").on("click", ".search_btn", function () {  //搜索商品
+                var _this = $(this);
+
+                var thisIndex = layui.layer.open({
+                    title: "选择商品图",
+                    type: 1,
+                    btn: ['确定'],
+                    area: ['900px', '400px'],
+                    content: $('#box'),
+                    yes: function (indexes, layero) {
+                        var selectImgDivs = selectImgTake.getSelectItems('selectItemDiv');
+                        var html = '';
+                        var itemList = $('.image-list').children();
+                        var source_num_iid = [];
+                        $.each(itemList, function (x, y) {
+                            var num_iid = $(y).attr('data-num-iid');
+                            source_num_iid.push(num_iid);
+                        });
+                        $.each(selectImgDivs, function (i, n) {
+                            var num_iid = $(n).attr('data-num-iid');
+                            if ($.inArray(num_iid, source_num_iid) == -1) {
+                                html += "<div data-num-iid='" + $(n).attr('data-num-iid') + "' style='margin: 15px 15px 0 0;width:200px;float:left;position: relative;box-shadow: 2px 2px 5px 0px black;'>";
+                                html += "<img src='" + $(n).attr('data-image-url') + "'   width='200' height='200'>";
+                                html += "<div class='item-title'><input type='text' class='layui-input' style='width:  90%;margin: 5%;' value='" + $(n).attr('data-title') + "'></div>";
+                                html += "<div class='item-sort'><input type='text' class='layui-input' style='width:  90%;margin: 5%;' value='" + (i + 1) + "' placeholder='请输入排序'></div>";
+                                html += "<div class='del-image' style='position: absolute;text-align: right;top: -7px;right: -7px;'><div class='close'></div></div>";
+                                html += "</div>";
+                                var num = $('.image-list').attr('data-num');
+                                $('.image-list').attr('data-num', parseInt(num) + 1);
+                            }
+                        });
+                        $('.image-list').append(html);
+                        $('#box').css('display', 'none');
+
+                        layui.layer.close(indexes);
+                    }
+                });
+                $(window).resize(function () {
+                    layui.layer.full(thisIndex);
+                });
+                layui.layer.full(thisIndex);
+                searchItems(1);
+
+                $("#box").on("click", ".item-search-btn", function () {
+                    searchItems(1);
+                });
+
+                function searchItems(page) {
+                    //初始化选品列表
+                    $('.selectImgDiv').empty();
+                    $('#page').empty();
+
+                    var title = $('.item-num-title').val();
+                    var num_iid = $('.item-num-iid').val();
+                    var cate_id = $('.item-cate option:selected').val();
+                    var sort_id = $('.item-sort option:selected').val();
+
+                    var params = {title:title,cate_id: cate_id,sort_id:sort_id, num_iid: num_iid, page: page};
+                    //获取商品图
+                    $.get('/Topic/getItems', params, function (res) {
+                        if (res.status == 0) {
+                            return false;
+                        }
+                        var data = res.info.items;
+                        var count = res.info.count;
+
+                        var html = '';
+                        var itemList = $('.image-list').children();
+                        var source_num_iid = [];
+                        $.each(itemList, function (x, y) {
+                            var num_iid = $(y).attr('data-num-iid');
+                            source_num_iid.push(num_iid);
+                        });
+
+                        $.each(data, function (i, n) {
+                            html += '<div class="item" style="float: left;" data-id="' + n.num_iid + '" ' + ($.inArray(n.num_iid, source_num_iid) !== -1 ? 'ischecked="true"' : '') + '>';
+                            html += '<div class="img_show"><img src="' + n.pic_url + '"/></div>';
+                            html += '<div class="img_title">' + n.title + '</div>';
+                            html += '<div class="img_desc">优惠券金额：' + n.coupon_money + '元<br/>券后价：' + n.coupon_price + '元<br/>销量：'+n.sale_num+'件<br/>佣金率：'+n.commission_rate+'</div>';
+                            html += '<div class="img_isCheck"><i class="iconfont icon-xuanzhong" ' + ($.inArray(n.num_iid, source_num_iid) !== -1 ? 'style="display:block;"' : '') + '></i></div>';
+                            html += '</div>';
+                        });
+
+                        $('.selectImgDiv').append(html);
+                        //初始化选择商品插件
+                        selectImgTake.init("selectItemDiv");
+                        if (page == 1) {
+                            pages(count);
+                        }
+                    });
+                }
+
+                function pages(count) {
+                    laypage({
+                        cont: "page",
+                        count: count,
+                        pages: Math.ceil(count / LIMIT_NUM),
+                        jump: function (obj, first) {
+                            if (first) {
+                                form.render();
+                            } else {
+                                index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                                searchItems(obj.curr);
+                                layer.close(index);
+                            }
+                        }
+                    })
+                }
+            });
+
+            //删除选定图片
+            $("body").on("click", ".del-image", function () {
+                var num = $('.image-list').attr('data-num');
+                var num_iid = $(this).parent().attr('data-num-iid');
+                $("#selectItemDivData").find('.' + num_iid).remove();
+                $(this).parent().remove();
+                $('.image-list').attr('data-num', parseInt(num) - 1);
+                $('.layui-upload-button').css('display', 'block');
+            });
+            form.on('select(showItemDesc)', function(data){
+                if (data.value!=1){
+                    $('.layui-form-item-pic').hide();
+                }else{
+                    $('.layui-form-item-pic').show();
+                }
+            });
+            //保存数据
+            form.on("submit(save-data)", function (data) {
+                var _btn = data.elem;
+                var itemList = $('.image-list').children();
+                var items = [];
+
+                $.each(itemList, function (i, n) {
+                    var num_iid = $(n).attr('data-num-iid');
+                    var image = $(n).find('img').attr('src');
+                    var title = $(n).find('.item-title input').val();
+                    var sort = $(n).find('.item-sort input').val();
+                    items.push({num_iid: num_iid,image_url:image, title: title, sort: sort});
+                });
+
+                data.field.items = items;
+                _btn.disabled = true;
+
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post("/Topic/updateTopic", data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            parent.location.reload();
+                        })
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+        })
+    </script>
+    <link rel="stylesheet" type="text/css" href="/Public/Admin/selectImg/css/selectImg.css"/>
+    <link rel="stylesheet" type="text/css" href="/Public/Admin/selectImg/css/iconfont.css"/>
+    <script type="text/javascript" src="/Public/Admin/selectImg/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/Public/Admin/selectImg/js/selectImg.js"></script>
+</block>

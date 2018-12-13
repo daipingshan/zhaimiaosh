@@ -1,0 +1,47 @@
+[ 2018-10-07T16:35:43+08:00 ] 127.0.0.1 /Item/itemDesc/num_iid/575039546958
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000025s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001494s ]
+SQL: SHOW COLUMNS FROM `zm_config` [ RunTime:0.0670s ]
+SQL: SELECT `content` FROM `zm_config` WHERE `id` = 1 LIMIT 1   [ RunTime:0.0679s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.010427s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.010590s ]
+SQL: SHOW COLUMNS FROM `zm_items` [ RunTime:0.0676s ]
+SQL: SELECT `desc` FROM `zm_items` WHERE `num_iid` = '575039546958' LIMIT 1   [ RunTime:0.0671s ]
+
+[ 2018-10-07T16:35:43+08:00 ] 127.0.0.1 /favicon.ico
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000952s ]
+
+[ 2018-10-07T16:36:45+08:00 ] 127.0.0.1 /Item/itemDesc/num_iid/575039546958
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000014s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000640s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001519s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001607s ]
+SQL: SHOW COLUMNS FROM `zm_items` [ RunTime:0.0906s ]
+SQL: SELECT `desc` FROM `zm_items` WHERE `num_iid` = '575039546958' LIMIT 1   [ RunTime:0.0615s ]
+
+[ 2018-10-07T16:37:22+08:00 ] 127.0.0.1 /Item/itemDesc/num_iid/575039546958
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000015s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000746s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001469s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.001558s ]
+SQL: SHOW COLUMNS FROM `zm_items` [ RunTime:0.0710s ]
+SQL: SELECT `desc` FROM `zm_items` WHERE `num_iid` = '575039546958' LIMIT 1   [ RunTime:0.0687s ]
+
+[ 2018-10-07T16:48:57+08:00 ] 127.0.0.1 /Item/itemDesc/num_iid/575039546958
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000013s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000643s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.003159s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003327s ]
+SQL: SHOW COLUMNS FROM `zm_items` [ RunTime:0.0617s ]
+SQL: SELECT `desc` FROM `zm_items` WHERE `num_iid` = '575039546958' LIMIT 1   [ RunTime:0.0602s ]
+

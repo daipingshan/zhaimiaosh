@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>宅喵生活，多彩生活</title>
+    <link rel="stylesheet" href="http://pic.zhaimiaosh.com/static/Home/css/style.css">
+    <link rel="bookmark" href="http://pic.zhaimiaosh.com/static/Home/images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="http://pic.zhaimiaosh.com/static/Home/css/tipso.min.css">
+    <link rel="shortcut icon" href="http://pic.zhaimiaosh.com/static/Home/images/favicon.ico" />
+    <script src="http://pic.zhaimiaosh.com/static/Home/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+<div class="nav" role="banner" style="display: block;">
+    <div class="top-wrap">
+        <div class="top-logo">
+            <a class="logo" href="index.html" title="宅喵生活" data-no-retina="">
+                <img src="http://pic.zhaimiaosh.com/static/Home/images/zhaimiao.png" class="top-img"/>
+            </a>
+        </div>
+
+        <div class="menu-box">
+            <ul class="top-ul">
+                <li class="top-li">
+                    <a href="{:U('Index/index')}"><h2 class="text">首页</h2></a>
+                </li>
+                <li class="top-li">
+                    <a href="{:U('Index/describe')}"><h2 class="text">企业简介</h2></a>
+                </li>
+                <li class="top-li">
+                    <a href="{:U('Index/download')}"><h2 class="text">下载APP</h2></a>
+                </li>
+                <li class="top-li">
+                    <h2 class="text" id="tip2">联系电话：4000333178</h2>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="bg"><img src="http://pic.zhaimiaosh.com/static/Home/images/app-download.png" class="images" alt=""></div>
+</div>
+
+<div class="foot">
+    <div class="j-center-block">
+        <div class="link-list">
+            <div class="column-1 column">
+                <span class="title">友情链接</span>
+                <ul>
+                    <li>
+                        <a target="_blank" href="http://www.taodianke.com">淘店客官网</a>
+                    </li>
+                    <li><a target="_blank" href="http://xian.youngt.com">青团网</a></li>
+                    <li>
+                        <a target="_blank" href="http://kd.youngt.com">青团快店</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column-2 column">
+                <span class="title">关于我们</span>
+                <ul>
+                    <li>
+                        <a rel="nofollow" href="describe.html">公司简介</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column-3 column">
+                <span class="title">联系我们</span>
+                <ul>
+                    <li>联系电话:
+                        <a href="tel:4000333178">4000333178</a>
+                    </li>
+                    <li>商务QQ：3405981934
+                    </li>
+                </ul>
+            </div>
+            <div class="column-4 column">
+                <img src="http://pic.zhaimiaosh.com/static/Home/images/qrcode.png" width="100" height="100">
+            </div>
+        </div>
+        <div class="info-wrapper">
+            <img src="http://pic.zhaimiaosh.com/static/Home/images/zhaimiao.png" class="company-logo">
+            <p class="company-name">陕西三多网络科技有限公司</p>
+            <p class="copyright">Copyright 2017&nbsp;&nbsp;
+                <a class="copyright-link" href="http://shxcainfo.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank">
+                    陕ICP备170170765号-1
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+/*拖动滚动条或滚动鼠标轮*/
+window.onscroll=function(){
+    if(document.body.scrollTop||document.documentElement.scrollTop>0){
+        document.getElementById('rTop').style.display="block"
+    }else{
+        document.getElementById('rTop').style.display="none"
+    }
+}
+/*点击“回到顶部”按钮*/
+function toTop(){
+    window.scrollTo('0','0');
+    document.getElementById('rTop').style.display="none"
+}
+</script>
+<style type="text/css">
+    .rTop{
+        position: fixed;
+        right: 1rem;
+        bottom: 2rem;
+    }
+    .img{
+        width: 40%;
+        height: 40%
+    }
+</style>
+<div class="rTop" id="rTop" onClick="toTop()"><img src="images/top.png" class="img"></div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.oh {
+  overflow: hidden;
+}
+.text-left {
+  text-align: left !important;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right !important;
+}
+.pr {
+  position: relative;
+}
+html,
+body,
+div,
+ul,
+li {
+  overflow-scrolling: touch;
+  webkit-overflow-scrolling: touch;
+}
+a,
+img {
+  border: none;
+}
+a:active {
+  border: none;
+  background-color: #eee;
+}
+input,
+textarea {
+  outline: none;
+  border: none;
+  resize: none;
+  font-family: "Arial", "microsoft yahei";
+}
+body {
+  font-family: "microsoft yahei" !important;
+  min-width: 240px;
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.8;
+  font-size: 61.5%;
+  padding: 0;
+  background-color: #faf5f6;
+  position: relative;
+}
+.page {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+}
+a {
+  color: #505050;
+  text-decoration: none;
+}
+i,
+b {
+  font-weight: normal;
+  font-style: normal;
+}
+p {
+  margin: 0;
+}
+/*浮动盒子布局*/
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.flex-center {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  /*垂直居中*/
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  /*水平居中*/
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+.flex-center-top {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  /*水平居中*/
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+.flex-col {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+}
+/*共用样式*/
+.page {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.media-list {
+  padding: 8px;
+  background-color: #fff;
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.line-btm:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid #e2e2e2;
+  -webkit-transform: scaleY(0.5);
+  -webkit-transform-origin: 0 0;
+}
+.line-top:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e2e2e2;
+  -webkit-transform: scaleY(0.5);
+  -webkit-transform-origin: 0 0;
+}
+.media-list-title {
+  font-size: 16px;
+  color: #000;
+  line-height: 24px;
+  letter-spacing: .5px;
+  margin: 15px auto 3px;
+}
+.media-list-subtext {
+  font-size: 12px;
+  color: #ff6a6a;
+  line-height: 16px;
+  letter-spacing: .5px;
+}
+.media-list-subtext b {
+  font-weight: bold;
+}
+.media-list-info {
+  font-size: 12px;
+  color: #969696;
+  height: 28px;
+  line-height: 1;
+  margin-top: 12px;
+  padding-bottom: 15px;
+}
+.media-list-info .sales {
+  margin-top: 4px;
+  text-align: right;
+  height: 14px;
+  line-height: 14px;
+}
+.media-list-info .sales img {
+  float: left;
+  width: auto;
+  height: 14px;
+  margin-right: 5px;
+}
+.media-list-info .sales i {
+  color: #3e3e3e;
+}
+.media-list-info i.rmb {
+  font-size: 26px;
+  color: #fc3616;
+  margin-top: 3px;
+  margin-right: 3px;
+}
+.media-list-info .coupon-txt {
+  max-width: 50px;
+}
+.media-list-info .coupon-txt .old-price {
+  padding-bottom: 2px;
+  text-decoration: line-through;
+}
+.media-list-info .coupon-txt .old-price i {
+  text-decoration: line-through;
+}
+.media-list-info .coupon-price {
+  width: auto;
+  height: 20px;
+  line-height: 20px;
+  display: inline-block;
+  margin: 4px 0 0 0;
+  position: relative;
+}
+.media-list-info .coupon-price img {
+  width: auto;
+  height: 20px;
+}
+.media-list-info .coupon-price .price {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #ff6600;
+  padding-left: 22px;
+  text-align: center;
+  font-size: 13px;
+  min-width: 35px;
+  height: 20px;
+  line-height: 23px;
+  z-index: 10;
+}
+.media-list-info:active {
+  color: #969696;
+}
+.media-list-info p {
+  display: inline-block;
+}
+.media-arial {
+  font-family: Arial !important;
+}
+.media-rmb {
+  margin: 0 4px;
+  color: #ff6600;
+}
+.media-price {
+  font-size: 30px;
+  color: #fc3616;
+  margin-right: 5px;
+}
+.btn {
+  font-size: 16px;
+  color: #000;
+  height: 45px;
+  line-height: 45px;
+  border-radius: 3px;
+}
+.btn-bg-orange {
+  background-color: #ff6600;
+}

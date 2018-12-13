@@ -1,0 +1,132 @@
+<extend name="Common/common"/>
+<block name="css">
+    <style>
+        .layui-input-inline {
+            margin-top: 5px;
+        }
+    </style>
+</block>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="mobile" value="" placeholder="请输入手机号码" class="layui-input search_mobile">
+            </div>
+            <div class="layui-input-inline">
+                <select name="level" class="layui-select search_level">
+                    <option value="">请选择用户身份</option>
+                    <foreach name="level_arr" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="10%">
+                <col>
+                <col>
+                <col>
+                <col width="20%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">手机号码</th>
+                <th style="text-align:center;">用户身份</th>
+                <th style="text-align:center;">邀请人数</th>
+                <th style="text-align:center;">账户余额</th>
+                <th style="text-align:center;">注册时间</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery;
+            var index = 0;
+            var user_id = "{:I('get.user_id')}";
+            getData(1);
+            function getData(page) {
+                var count = 0;
+                var data = [];
+                param = {
+                    user_id: user_id,
+                    mobile: $('.search_mobile').val(),
+                    level: $('.search_level option:selected').val(),
+                    page: page
+                };
+                $.get('/User/openDownLine', param, function (res) {
+                    data = res.info.data;
+                    count = res.info.count;
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData(1);
+            })
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td align="center">' + data[i].mobile + '</td>'
+                                + '<td align="center">' + data[i].level_name + '</td>'
+                                + '<td align="center">' + data[i].invite_a_num + '&nbsp;&nbsp;|&nbsp;&nbsp;' + data[i].invite_b_num + '</td>'
+                                + '<td align="center">¥' + data[i].account_balance + '</td>'
+                                + '<td align="center">' + data[i].add_time + '</td>';
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="10" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

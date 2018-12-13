@@ -1,0 +1,26 @@
+.header_text {
+    display: block;
+}
+#nav li {
+    background: none;
+}
+.header_text li {
+    float: left;
+}
+#table {
+    padding-top: 100px;
+}
+.line_down {
+    padding-top: 100px;
+}
+.about_us {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+.txt .left .col-50 {
+    padding-top: 50px;
+}
+.download_smallimg {
+    margin: 0 auto;
+}
+		

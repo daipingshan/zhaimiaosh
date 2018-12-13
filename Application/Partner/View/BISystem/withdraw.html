@@ -1,0 +1,117 @@
+<extend name="Common/common"/>
+<block name="css">
+    <link rel="stylesheet" href="__CSS__/main.css" media="all"/>
+</block>
+<block name="body">
+    <div class="row" style="padding: 0 10px">
+        <blockquote class="layui-elem-quote title">最近六十天提现数据折线图</blockquote>
+        <div id="data-chart" style="height: 400px;width: 100%;"></div>
+    </div>
+</block>
+<block name="js">
+    <script src="https://cdn.bootcss.com/echarts/4.0.4/echarts.min.js"></script>
+    <script>
+        var dateList = [];
+        var numList = [];
+        layui.config({
+            base: JS_PATH
+        }).use(['jquery'], function () {
+            var $ = layui.jquery;
+            var index = 0;
+            getData();
+
+            function getData() {
+                $.get('/BISystem/withdraw', {}, function (res) {
+                    if (res.status == 1) {
+                        dateList = res.info.dateList;
+                        dataList = res.info.dataList;
+
+                        drawCharts(dateList, dataList);
+                    } else {
+                        layer.msg(res.info);
+                    }
+                });
+                if (index) {
+                    layer.close(index);
+                }
+            }
+        });
+
+        function drawCharts(dateList, dataList) {
+            var myChart = echarts.init(document.getElementById('data-chart'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['提现数据']
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    dataZoom: [
+                        {
+                            type: 'slider',
+                            xAxisIndex: 0,
+                            filterMode: 'empty',
+                            start: 50,
+                            end: 100
+                        },
+                        // {
+                        //     type: 'inside',
+                        //     realtime: true,
+                        //     start:70,
+                        //     end:100
+                        // }
+                    ],
+                    grid: {
+                        left: "30px",
+                        right: "30px",
+                        bottom: '50px',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: dateList
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series:
+                        [
+                            {
+                                name: '提现金额',
+                                type: 'line',
+                                stack: '总量',
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'top'
+                                    }
+                                },
+                                areaStyle: {normal: {}},
+                                data: dataList
+                            }
+                        ]
+                }
+            ;
+
+            myChart.setOption(option);
+        }
+    </script>
+</block>

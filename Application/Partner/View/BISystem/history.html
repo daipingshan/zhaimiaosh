@@ -1,0 +1,533 @@
+<extend name="Common/common"/>
+<block name="css">
+    <link rel="stylesheet" href="__CSS__/main.css" media="all"/>
+</block>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <label class="layui-form-label">范围选择</label>
+            <div class="layui-input-inline">
+                <input type="text" name="date" id="date-picker-start" value="{$start_date}" placeholder="{$start_date}"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="date" id="date-picker-end" value="{$end_date}" placeholder="{$start_date}"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <select name="mall-platform" class="layui-select" id="change-mall-platform">
+                    <option value="all">全部平台</option>
+                    <option value="taobao">淘宝</option>
+                    <option value="pinduoduo">拼多多</option>
+                    <option value="jingdong">京东</option>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="panel_box row">
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#FF5722;">
+                    <i class="iconfont icon-dongtaifensishu" data-icon="icon-dongtaifensishu"></i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="tnu-qty" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">新用户下单数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color: #e85462;">
+                    <i class="layui-icon" data-icon="&#xe62a;">&#xe62a;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="total-order-num" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">总订单数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon">
+                    <i class="layui-icon" data-icon="&#xe62d;">&#xe62d;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="tnu-op" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">新用户下单占比</cite>
+                </div>
+            </a>
+        </div>
+
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#009688;">
+                    <i class="layui-icon" data-icon="&#xe613;">&#xe613;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="paid-user-num" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">下单用户数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color: #e88454;">
+                    <i class="layui-icon" data-icon="&#xe63a;">&#xe63a;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="order-pay-total" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">总支付金额</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#5FB878;">
+                    <i class="layui-icon" data-icon="&#xe64a;">&#xe64a;</i>
+                </div>
+                <div class="panel_word imgAll">
+                    <span class="total-commisson" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">总佣金：支付/结算</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#F7B824;">
+                    <i class="iconfont icon-wenben" data-icon="icon-wenben"></i>
+                </div>
+                <div class="panel_word waitNews">
+                    <span class="user-commission" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">用户分成: 支付/结算</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#2F4056;">
+                    <i class="iconfont icon-text" data-icon="icon-text"></i>
+                </div>
+                <div class="panel_word">
+                    <span class="company-profit" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">利润：支付/结算</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color: #5474e8">
+                    <i class="layui-icon" data-icon="&#xe628;">&#xe628;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="user_average" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">客单价/客单量</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#a9c1b3">
+                    <i class="layui-icon" data-icon="&#xe62e;">&#xe62e;</i>
+                </div>
+                <div class="panel_word imgAll">
+                    <span class="order_average" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">笔单价</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#bdab6a">
+                    <i class="iconfont" data-icon="&#xe636;">&#xe636;</i>
+                </div>
+                <div class="panel_word waitNews">
+                    <span class="average_profit" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">客单利润/笔单利润</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#a9abc1">
+                    <i class="iconfont" data-icon="&#xe64d;">&#xe64d;</i>
+                </div>
+                <div class="panel_word">
+                    <span class="commission_rate" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">佣金率</cite>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row" style="padding: 0 10px">
+        <blockquote class="layui-elem-quote title charts-title">每日新增订单折线图</blockquote>
+        <div id="data-chart" style="height: 400px;width: 100%;margin-top: 30px;"></div>
+    </div>
+</block>
+<block name="js">
+    <script src="https://cdn.bootcss.com/echarts/4.0.4/echarts.min.js"></script>
+    <script>
+        var dateList = [];
+        var numList = [];
+        layui.config({
+            base: JS_PATH
+        }).use(['laydate', 'jquery'], function () {
+            var $ = layui.jquery,
+                laydate = layui.laydate;
+
+            var start = {
+                max: laydate.now(-1)
+                , istoday: true
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas //将结束日的初始值设定为开始日
+                }
+            };
+
+            var end = {
+                max: laydate.now(-1)
+                , istoday: true
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                }
+            };
+            document.getElementById('date-picker-start').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            };
+            document.getElementById('date-picker-end').onclick = function () {
+                end.elem = this;
+                laydate(end);
+            };
+            var index = 0;
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData();
+            });
+
+            getData();
+
+            function getData() {
+                var start_date = $('#date-picker-start').val();
+                var end_date = $('#date-picker-end').val();
+                var mall_platform = $('#change-mall-platform').val();
+
+                $.get('/BISystem/history', {
+                    start_date: start_date,
+                    end_date: end_date,
+                    mall_platform:mall_platform
+                }, function (res) {
+                    if (res.status == 1) {
+                        console.log(res.info);
+                        var data = res.info.data;
+                        dateList = res.info.dateList;
+                        numList = res.info.numList;
+
+                        $(".tnu-qty").html(data.new_user_order_qty ? data.new_user_order_qty : '0');
+                        $(".tnu-op").html(parseInt(data.order_qty) ? ((data.new_user_order_qty / data.order_qty) * 100).toFixed(2) + "%" : '0%');
+                        $(".total-order-num").html(data.order_qty ? data.order_qty : '0');
+                        $(".paid-user-num").html(data.order_paid_user_num ? data.order_paid_user_num : '0');
+                        $(".order-pay-total").html(data.order_pay_total ? (parseFloat(data.order_pay_total)).toFixed(2) : '0');
+                        $(".total-commisson").html((data.order_commission_paid ? (parseFloat(data.order_commission_paid)).toFixed(2) : '0') + " / " + (data.order_commission_settle ? (parseFloat(data.order_commission_settle)).toFixed(2) : '0'));
+                        $(".user-commission").html((data.user_commission_paid ? (parseFloat(data.user_commission_paid )).toFixed(2): '0') + " / " + (data.user_commission_settle ? (parseFloat(data.user_commission_settle)).toFixed(2) : '0'));
+                        $(".company-profit").html((data.profit_paid ? (parseFloat(data.profit_paid)).toFixed(2) : '0') + " / " + (data.profit_settle ? (parseFloat(data.profit_settle)).toFixed(2) : '0'));
+                        $(".user_average").html( (data.order_paid_user_num ? parseFloat(data.order_pay_total/data.order_paid_user_num).toFixed(2): 0)+'/'+ (data.order_paid_user_num?parseFloat(data.order_qty/data.order_paid_user_num).toFixed(2):0));
+                        $(".order_average").html(data.order_qty ? parseFloat(data.order_pay_total/data.order_qty).toFixed(2): 0);
+                        $(".average_profit").html((data.order_paid_user_num ? parseFloat(data.profit_paid/data.order_paid_user_num).toFixed(2): 0)+'/'+ (data.order_qty?parseFloat(data.profit_paid/data.order_qty).toFixed(2):0));
+                        $(".commission_rate").html(data.order_pay_total ? parseFloat(data.order_commission_paid/data.order_pay_total*100).toFixed(2)+'%': 0);
+
+                        //折线图
+                        $(".charts-title").html(dateList[0] + ' - ' + dateList[dateList.length - 1] + " 每日新增订单折线图");
+                        drawCharts(dateList, numList);
+                    } else {
+                        layer.msg(res.info);
+                    }
+                });
+                if (index) {
+                    layer.close(index);
+                }
+            }
+        });
+
+        function drawCharts(dateList, numList) {
+            var myChart = echarts.init(document.getElementById('data-chart'));
+            var cate = ['订单数量','新用户下单数','下单用户数','总支付金额','支付佣金','结算佣金','支付分成','结算分成','支付利润','结算利润','客单价','客单量','笔单价','客单利润','笔单利润','佣金率'];
+            var selected = {};
+            for(var i=0;i<cate.length;i++)
+            {
+                selected[cate[i]] = i<3;
+            }
+
+            // 指定图表的配置项和数据
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    },
+                    formatter:function(params)
+                    {
+                        var relVal = params[0].name;
+                        for (var i = 0, l = params.length; i < l; i++) {
+                            relVal += '<br/>' + params[i].seriesName + ' : ' + params[i].value;
+                            if (params[i].seriesName=="佣金率")
+                            {
+                                relVal += "%";
+                            }
+                        }
+                        return relVal;
+                    }
+                },
+                legend: {
+                    type: 'scroll',
+                    left: 50,
+                    right:50,
+                    selected: selected,
+                    data: cate
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: "50px",
+                    right: "50px",
+                    bottom: '40px',
+                    containLabel: true
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        filterMode: 'empty',
+                        start: 0,
+                        end: 100
+                    }
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: dateList
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '订单数量',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.order_qty
+                    },
+                    {
+                        name: '新用户下单数',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.new_user_order_qty
+                    },
+                    {
+                        name: '下单用户数',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.order_paid_user_num
+                    },
+                    {
+                        name: '总支付金额',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.order_pay_total
+                    },
+                    {
+                        name: '支付佣金',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.order_commission_paid
+                    },
+                    {
+                        name: '结算佣金',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.order_commission_settle
+                    },
+                    {
+                        name: '支付分成',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.user_commission_paid
+                    },
+                    {
+                        name: '结算分成',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.user_commission_settle
+                    },
+                    {
+                        name: '支付利润',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.profit_paid
+                    },
+                    {
+                        name: '结算利润',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.profit_settle
+                    },
+                    {
+                        name: '客单价',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.user_average_price
+                    },
+                    {
+                        name: '客单量',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.user_average_num
+                    },
+                    {
+                        name: '笔单价',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.order_average_price
+                    },
+                    {
+                        name: '客单利润',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.user_average_profit
+                    },
+                    {
+                        name: '笔单利润',
+                        type: 'line',
+
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.order_average_profit
+                    },
+                    {
+                        name: '佣金率',
+                        type: 'line',
+
+                        areaStyle: {normal: {}},
+                        data: numList.commission_rate
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+    </script>
+</block>

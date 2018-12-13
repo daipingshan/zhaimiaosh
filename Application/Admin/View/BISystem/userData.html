@@ -1,0 +1,578 @@
+<extend name="Common/common"/>
+<block name="css">
+    <link rel="stylesheet" href="__CSS__/main.css" media="all"/>
+</block>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <label class="layui-form-label">范围选择</label>
+            <div class="layui-input-inline">
+                <input type="text" name="date" id="date-picker-start" value="{$start_date}" placeholder="{$start_date}"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="date" id="date-picker-end" value="{$end_date}" placeholder="{$start_date}"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select" id="change-partner">
+                    <foreach name="partners" item="partner" key="k">
+                        <option value="{$partner.id}">{$partner.partner_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="row" style="padding-left:10px;margin-bottom: 10px;font-size: 15px;">
+        <blockquote class="layui-elem-quote title new-user-info" style="background: #F7B824;color: #fff;"></blockquote>
+    </div>
+    <div class="panel_box row">
+        <blockquote class="layui-elem-quote title" style="margin-left:10px;margin-bottom: 5px;border: none;font-size: 10px">因下列数据来源于每日统计各用户级别的数量，所以不做汇总，只区分合作伙伴，日期条件为所选的结束日期</blockquote>
+        <div class="panel col">
+            <a href="javascript:void(0)">
+                <div class="panel_icon">
+                    <i class="layui-icon" data-icon="&#xe62d;">&#xe62d;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="level-zero" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">消费者数量</cite>
+                </div>
+            </a>
+        </div>
+
+        <div class="panel col">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#009688;">
+                    <i class="layui-icon" data-icon="&#xe613;">&#xe613;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="level-one" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">V1推广员数量</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color: #e88454;">
+                    <i class="layui-icon" data-icon="&#xe63a;">&#xe63a;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="level-two" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">V2推广员数量</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#5FB878;">
+                    <i class="layui-icon" data-icon="&#xe64a;">&#xe64a;</i>
+                </div>
+                <div class="panel_word imgAll">
+                    <span class="level-three" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">V3推广员数量</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#F7B824;">
+                    <i class="iconfont icon-wenben" data-icon="icon-wenben"></i>
+                </div>
+                <div class="panel_word waitNews">
+                    <span class="level-four" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">V4推广员数量</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#2F4056;">
+                    <i class="iconfont icon-text" data-icon="icon-text"></i>
+                </div>
+                <div class="panel_word">
+                    <span class="level-five" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">团长数量</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#9ea8b5;">
+                    <i class="layui-icon" data-icon="&#xe61b;">&#xe61b;</i>
+                </div>
+                <div class="panel_word">
+                    <span class="ios-qty" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">iOS注册数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#bd854a;">
+                    <i class="layui-icon" data-icon="&#xe62e;">&#xe62e;</i>
+                </div>
+                <div class="panel_word">
+                    <span class="android-qty" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">安卓注册数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#ca0404;">
+                    <i class="layui-icon" data-icon="&#xe600;">&#xe600;</i>
+                </div>
+                <div class="panel_word">
+                    <span class="mini-program-qty" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">小程序注册数</cite>
+                </div>
+            </a>
+        </div>
+
+    </div>
+    <div class="row" style="padding-left:10px;margin-bottom: 10px;font-size: 15px;">
+        <blockquote class="layui-elem-quote title charts-circle-title">用户占比</blockquote>
+        <div id="data-circle-chart" style="height: 430px;width: 100%;"></div>
+    </div>
+    <div class="row" style="padding-left:10px;margin-bottom: 10px;font-size: 15px;">
+        <blockquote class="layui-elem-quote title charts-title">用户新增数折线图</blockquote>
+        <div id="data-chart" style="height: 400px;width: 100%;margin-top:30px"></div>
+    </div>
+    <div class="row" style="padding-left:10px;margin-bottom: 10px;font-size: 15px;">
+        <blockquote class="layui-elem-quote title charts-platform-title">不同客户端注册用户数折线图</blockquote>
+        <div id="data-platform-chart" style="height: 400px;width: 100%;margin-top:30px"></div>
+    </div>
+    <div class="row" style="padding-left:10px;margin-bottom: 10px;font-size: 15px;">
+        <blockquote class="layui-elem-quote list-title">团长当日拉新排行榜<i class="iconfont icon-new1"></i></blockquote>
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">排名</th>
+                <th style="text-align:center;">手机号码</th>
+                <th style="text-align:center;">昵称</th>
+                <th style="text-align:center;">所属合作伙伴</th>
+                <th style="text-align:center;">拉新人数</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+</block>
+<block name="js">
+    <script src="https://cdn.bootcss.com/echarts/4.0.4/echarts.min.js"></script>
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['laydate', 'jquery'], function () {
+            var $ = layui.jquery,
+                laydate = layui.laydate;
+
+            var start = {
+                max: laydate.now(-1)
+                , istoday: true
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas //将结束日的初始值设定为开始日
+                }
+            };
+
+            var end = {
+                max: laydate.now(-1)
+                , istoday: true
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                }
+            };
+            document.getElementById('date-picker-start').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            };
+            document.getElementById('date-picker-end').onclick = function () {
+                end.elem = this;
+                laydate(end);
+            };
+            var index = 0;
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData();
+            });
+
+            getData();
+
+            function getData() {
+                var start_date = $('#date-picker-start').val();
+                var end_date = $('#date-picker-end').val();
+                var partner_id = $('#change-partner').val();
+
+                $.get('/BISystem/userData', {
+                    start_date: start_date,
+                    end_date: end_date,
+                    partner_id: partner_id
+                }, function (res) {
+                    if (res.status == 1) {
+
+                        var data       = res.info.data;
+                        var dateList   = res.info.dateList;
+                        var numList    = res.info.numList;
+                        var rankList   = res.info.rankList;
+                        var circleData = [
+                            {name:'普通消费者',value:(data.level_zero?data.level_zero:0)},
+                            {name:'V1推广员',value:(data.level_one?data.level_one:0)},
+                            {name:'V2推广员',value:(data.level_two?data.level_two:0)},
+                            {name:'V3推广员',value:(data.level_three?data.level_three:0)},
+                            {name:'V4推广员',value:(data.level_four?data.level_four:0)},
+                            {name:'团长',value:(data.level_five?data.level_five:0)}
+                        ];
+
+                        $(".new-user-info").html(start_date+'日——'+end_date+'日，新增用户：'+(data.new_user_qty ? data.new_user_qty : '0')+'人');
+                        $(".level-zero").html((data.level_zero ? data.level_zero : '0')+'人');
+                        $(".level-one").html((data.level_one ? data.level_one : '0')+'人');
+                        $(".level-two").html((data.level_two ? data.level_two : '0')+'人');
+                        $(".level-three").html((data.level_three ? data.level_three : '0')+'人');
+                        $(".level-four").html((data.level_four ? data.level_four : '0')+'人');
+                        $(".level-five").html((data.level_five ? data.level_five : '0')+'人');
+                        $(".ios-qty").html((data.ios_qty ? data.ios_qty : '0')+'人');
+                        $(".android-qty").html((data.android_qty ? data.android_qty : '0')+'人');
+                        $(".mini-program-qty").html((data.mini_program_qty ? data.mini_program_qty : '0')+'人');
+
+                        //饼状图
+                        $(".charts-circle-title").html(dateList[dateList.length - 1] + " 用户占比");
+                        drawcircleCharts(circleData);
+                        //折线图
+                        $(".charts-title").html(dateList[0] + ' - ' + dateList[dateList.length - 1] + " 用户数据折线图");
+                        drawCharts(dateList, numList);
+
+                        $(".charts-platform-title").html(dateList[0] + ' - ' + dateList[dateList.length - 1] + " 不同客户端注册用户数折线图");
+                        drawPlatformCharts(dateList, numList);
+
+                        //排行
+                        $(".list-title").html(dateList[0] + ' - ' + dateList[dateList.length - 1] + " 团长拉新排行榜");
+                        $(".links_content").html(renderDate(rankList));
+                    } else {
+                        layer.msg(res.info);
+                    }
+                });
+                if (index) {
+                    layer.close(index);
+                }
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data!=null && data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var tmp_num = i + 1;
+                        dataHtml += '<tr>'
+                            + '<td align="center" style="color: #FF5722"><button class="layui-btn layui-btn-danger" style="width: 20px;height: 20px;border-radius: 50%;padding: 0;line-height: 20px">' + tmp_num + '</button></td>'
+                            + '<td align="center">' + data[i].mobile + '</td>'
+                            + '<td align="center">' + data[i].nickname + '</td>';
+
+                        dataHtml += '<td style="color:#f00;text-align: center">' + data[i].partner_name + '</td>'
+                        dataHtml += '<td align="center" style="color: #5FB878">' + data[i].num + '</td>'
+                            + '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="7" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        });
+
+        function drawCharts(dateList, numList) {
+            var myChart = echarts.init(document.getElementById('data-chart'));
+            var cate = ['新增用户','普通消费者','V1推广员','V2推广员','V3推广员','V4推广员','团长'];
+            var selected = {};
+            for (var i = 0; i < cate.length; i++) {
+                selected[cate[i]] = i>0;
+            }
+            // 指定图表的配置项和数据
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: cate,
+                    selected: selected
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: "50px",
+                    right: "50px",
+                    bottom: '40px',
+                    containLabel: true
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        filterMode: 'empty',
+                        start: 0,
+                        end: 100
+                    }
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: dateList
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '新增用户',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.new_user_qty
+                    },
+                    {
+                        name: '普通消费者',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.level_zero
+                    },
+                    {
+                        name: 'V1推广员',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.level_one
+                    },
+                    {
+                        name: 'V2推广员',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.level_two
+                    },
+                    {
+                        name: 'V3推广员',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.level_three
+                    },
+                    {
+                        name: 'V4推广员',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.level_four
+                    },
+                    {
+                        name: '团长',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.level_five
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+        function drawPlatformCharts(dateList, numList) {
+            var myChart = echarts.init(document.getElementById('data-platform-chart'));
+            var cate = ['IOS用户','安卓用户','微信小程序用户'];
+            var selected = {};
+            for (var i = 0; i < cate.length; i++) {
+                selected[cate[i]] = i>=0;
+            }
+            // 指定图表的配置项和数据
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: cate,
+                    selected: selected
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: "50px",
+                    right: "50px",
+                    bottom: '40px',
+                    containLabel: true
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        filterMode: 'empty',
+                        start: 0,
+                        end: 100
+                    }
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: dateList
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'IOS用户',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.ios_qty
+                    },
+                    {
+                        name: '安卓用户',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.android_qty
+                    },
+                    {
+                        name: '微信小程序用户',
+                        type: 'line',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'top'
+                            }
+                        },
+                        areaStyle: {normal: {}},
+                        data: numList.mini_program_qty
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+        function drawcircleCharts(data) {
+            var myChart = echarts.init(document.getElementById('data-circle-chart'));
+            option = {
+                backgroundColor: '#f2f2f2',
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 100,
+                    top: 'center',
+                    bottom: 20,
+                    data: ['普通消费者','V1推广员','V2推广员','V3推广员','V4推广员','团长'],
+
+                    selected: []
+                },
+                series : [
+                    {
+                        name: '人数',
+                        type:'pie',
+                        radius : '80%',
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        data: data,
+                        selectedMode: 'single',
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+    </script>
+</block>

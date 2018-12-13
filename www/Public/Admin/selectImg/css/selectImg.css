@@ -1,0 +1,59 @@
+.selectImgDiv .item {
+    width: 150px;
+    border: solid thin #AAAAAA;
+    margin: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 2px 2px 5px 0px #adadad;
+}
+
+.selectImgDiv .item:hover {
+    border: solid thin #0099FF;
+}
+
+.selectImgDiv .item .img_show {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.selectImgDiv .item .img_show img {
+    width: 100%;
+    height: 100%;
+}
+
+.selectImgDiv .item .img_title {
+    text-align: left;
+    opacity: 0.6;
+    font-size: 12px;
+    line-height: 20px;
+    background-color: #000000;
+    position: relative;
+    color: #FFFFFF;
+    padding: 0 2px;
+}
+
+.selectImgDiv .item .img_desc {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+    font-size: 12px;
+    line-height: 20px;
+    background-color: #fff;
+    color: #000;
+    padding-left:2px;
+}
+
+.selectImgDiv .item .img_isCheck {
+    position: absolute;
+    top: -1px;
+    right: 0;
+}
+
+.selectImgDiv .item .img_isCheck i {
+    font-size: 25px;
+    display: none;
+    color: #66FF33;
+}

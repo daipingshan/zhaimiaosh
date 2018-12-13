@@ -1,0 +1,53 @@
+<include file="Public/header" title="{$name}--优惠券大放送了" keywords="淘店客，您身边的购物返利神器"/>
+
+
+<div id="containter" class="container">
+
+    <!--固定的-->
+    <div class="tiger_nav1" id="head_seach">
+        <div class="seach_nav">
+            <div class="seach_1" onclick="javascript:history.go(-1);return false;"></div>
+            <div class="seach_2">
+                <span class="t-index">{$name}</span>
+            </div>
+            <div class="seach_3" data-url="{:U('Index/index',array('user_id'=>$user_id))}" onclick="window.location.href=$(this).data('url')"></div>
+        </div>
+    </div>
+    <!--固定的结束-->
+
+    <!--浮动导航-->
+    <div class="tiger_nav" id="pf_seach" style="display:none;height: 50px;">
+        <div class="seach_nav">
+            <div class="seach_1" onclick="javascript:history.go(-1);return false;"></div>
+            <div class="seach_2">
+                <form id="search-form" action="{:U('Item/search')}" method="get">
+                    <input type="hidden" name="user_id" value="{$user_id}">
+                    <input type="text" id="keyword" name="keyword" value="" class="tige_sear" placeholder="请输入您要找的商品"/>
+                    <button id="tiger_search-submit" type="submit" onclick="searchan()">
+                        <img src="__IMG__/search.png"/>
+                    </button>
+                </form>
+            </div>
+            <div class="seach_3" data-url="{:U('Index/index',array('user_id'=>$user_id))}" onclick="window.location.href=$(this).data('url')"></div>
+        </div>
+    </div>
+
+    <!--浮动导航结束-->
+
+
+    <div class="goods_list index_goodslist">
+        <section class="goods" id="pageCon">
+            <ul id="list_box" class="list_box">
+                <include file='Public:cateItemList'/>
+            </ul>
+        </section>
+        <div id="list_more" class="loading1" style="margin-top:10px;text-align:center">
+            <span onclick="get_list(0);">查看更多</span>
+        </div>
+    </div>
+
+</div>
+
+<script src="__JS__/asynloading.js"></script>
+<script src="__JS__/common_phone.js"></script>
+<include file="Public/footer"/>

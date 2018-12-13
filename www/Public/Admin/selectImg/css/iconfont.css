@@ -1,0 +1,54 @@
+
+@font-face {font-family: "iconfont";
+  src: url('../font/iconfont.eot?t=1495283771116'); /* IE9*/
+  src: url('../font/iconfont.eot?t=1495283771116#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../font/iconfont.woff?t=1495283771116') format('woff'), /* chrome, firefox */
+  url('../font/iconfont.ttf?t=1495283771116') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../font/iconfont.svg?t=1495283771116#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xuanzhong:before { content: "\e617"; }
+
+.close {
+  right: -25px;
+  top: -25px;
+  width: 15px;
+  height: 15px;
+  background: red;
+  border-radius: 25px;
+  box-shadow: 2px 2px 5px 0px black;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: red;
+}
+.close:before {
+  position: absolute;
+  content: '';
+  width: 1px;
+  height: 10px;
+  background: white;
+  transform: rotate(45deg);
+  left: 7px;
+  top: 1px;
+}
+.close:after{
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 10px;
+  background: white;
+  transform: rotate(-45deg);
+  left: 8px;
+  top: 1px;
+}
+

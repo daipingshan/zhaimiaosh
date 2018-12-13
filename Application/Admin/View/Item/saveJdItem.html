@@ -1,0 +1,145 @@
+<extend name="Common/common"/>
+<block name="body">
+    <fieldset class="layui-elem-field" style="width: 80%">
+        <legend>商品基本信息</legend>
+        <div class="layui-field-box">
+            <form class="layui-form layui-form-pane" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商品编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="num_iid" autocomplete="off" placeholder="商品编号"
+                               class="layui-input" value="{$info['num_iid']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商品标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" autocomplete="off" placeholder="商品标题"
+                               class="layui-input" value="{$info['title']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商品图片</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="pic_url" autocomplete="off" placeholder="商品图片链接地址"
+                               class="layui-input" value="{$info['pic_url']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">优惠券链接</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="click_url" autocomplete="off" placeholder="商品优惠券链接"
+                               class="layui-input" value="{$info['click_url']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商品价格</label>
+                    <div class="layui-input-inline">
+                        <input type="number" step="0.01" name="price" autocomplete="off" placeholder="商品价格"
+                               class="layui-input"
+                               value="{$info['price']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">券后价格</label>
+                    <div class="layui-input-inline">
+                        <input type="number" step="0.01" name="coupon_price" autocomplete="off" placeholder="券后价格"
+                               class="layui-input" value="{$info['coupon_price']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">优惠券面额</label>
+                    <div class="layui-input-inline">
+                        <input type="number" step="0.01" name="coupon_money" autocomplete="off" placeholder="优惠券面额"
+                               class="layui-input" value="{$info['coupon_money']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">优惠券结束日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="coupon_end_time" autocomplete="off" id="date-picker"
+                               placeholder="优惠券结束日期"
+                               class="layui-input" value="{$info['coupon_end_time']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">补贴金额</label>
+                    <div class="layui-input-inline">
+                        <input type="number" step="0.01" name="subsidy_money" autocomplete="off" placeholder="补贴金额"
+                               class="layui-input" value="{$info['subsidy_money']}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">商品类型</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="type" value="free" title="免单" checked>
+                        <input type="radio" name="type" value="new" title="新客单"
+                        <if condition="$info['type'] eq 'new'">checked</if>
+                        >
+                    </div>
+                </div>
+
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">是否在线</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="is_online" value="1" title="是" checked>
+                        <input type="radio" name="is_online" value="0" title="否"
+                        <if condition="$info['is_online'] eq '0'">checked</if>
+                        >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <if condition="$info"><input type="hidden" name="id" value="{$info.id}"></if>
+                    <button class="layui-btn" lay-submit="" lay-filter="submit" type="button">立即提交</button>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laydate'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    $ = layui.jquery
+                    , laydate = layui.laydate;
+
+            form.render();
+            /**
+             * 日期选择
+             */
+            var date_picker = {
+                max: laydate.now(3),
+                istoday: true,
+                format: 'YYYY-MM-DD hh:mm:ss', //日期格式
+                istime: true //是否开启时间选择
+            };
+            document.getElementById('date-picker').onclick = function () {
+                date_picker.elem = this;
+                laydate(date_picker);
+            };
+            //保存数据
+            form.on("submit(submit)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "{:U('Item/saveJdItem')}";
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            parent.location.reload();
+                        })
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+        })
+    </script>
+</block>

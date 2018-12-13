@@ -1,0 +1,254 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="mobile" value="" placeholder="请输入手机号"
+                       class="layui-input search_mobile">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="order_sn" value="" placeholder="请输入订单编号"
+                       class="layui-input search_order_sn">
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select search_status">
+                    <option value="">订单状态</option>
+                    <foreach name="status_arr" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="start_time" id="date-picker-start" value="" placeholder="开始时间"
+                       class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="end_time" id="date-picker-end" value="" placeholder="结束时间"
+                       class="layui-input">
+            </div>
+            <a class="layui-btn search_btn" data-type="select" style="margin-right: 10px;">查询</a>
+            <a class="layui-btn layui-btn-danger search_btn" data-type="down">导出</a>
+        </div>
+        <div class="layui-inline">
+            <a class="layui-btn order_btn" style="background-color:#5FB878">批量审核通过订单</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="20%">
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">用户手机</th>
+                <th style="text-align:center;">订单编号</th>
+                <th style="text-align:center;">补贴金额</th>
+                <th style="text-align:center;">订单状态</th>
+                <th style="text-align:center;">时间</th>
+                <th style="text-align:center;">备注</th>
+                <th style="text-align:center;">操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="box">
+    <div id="order-box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width:80%;" name="save-order">
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单号</label>
+                <div class="layui-input-block">
+                    <textarea type="text" name="order_sns" id="order_sns" class="layui-textarea"
+                          lay-verify="required" rows="15"
+                          placeholder="请输入待审核订单号"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="save-order">立即提交审核通过</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">操作结果</label>
+                <div class="layui-input-block">
+                    <span id='tips'></span>
+                </div>
+            </div>
+        </form>
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage', 'laydate'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery,
+                    laydate = layui.laydate;
+
+            var start = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas //将结束日的初始值设定为开始日
+                }
+            };
+
+            var end = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                }
+            };
+            document.getElementById('date-picker-start').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            };
+            document.getElementById('date-picker-end').onclick = function () {
+                end.elem = this;
+                laydate(end);
+            };
+
+            var index = 0;
+            getData(1, 'select');
+            function getData(page, search_type) {
+                var count = 0;
+                var data = [];
+                var param = {
+                    mobile: $('.search_mobile').val(),
+                    order_sn: $('.search_order_sn').val(),
+                    status: $('.search_status option:selected').val(),
+                    start_date: $('#date-picker-start').val(),
+                    end_date: $('#date-picker-end').val(),
+                    search_type: search_type,
+                    page: page
+                };
+
+                if (search_type == 'down') {
+                    var tmp = [];
+                    for (var key in param) {
+                        if (param[key]) {
+                            tmp.push(key + '=' + param[key]);
+                        }
+                    }
+                    var url_param = tmp.join('&');
+                    if (url_param) {
+                        url_param.substr(1);
+                    }
+                    var location_url = "/Finance/jdFreeOrder?" + url_param;
+                    location.href = location_url;
+                } else {
+                    $.get('/Finance/jdFreeOrder', param, function (res) {
+                        data = res.info.data;
+                        count = res.info.count;
+                        $(".links_content").html(renderDate(data));
+                        if (index) {
+                            layer.close(index);
+                        }
+                        if (page == 1) {
+                            pages(count);
+                        }
+                    })
+                }
+            }
+
+            //查询
+            $(".search_btn").click(function () {
+                if ($(this).data('type') == 'select') {
+                    index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                }
+                getData(1, $(this).data('type'));
+            })
+
+            //批量审核通过订单
+            $(".order_btn").click(function () {
+                $('#tips').text('');
+                layui.layer.open({
+                    title: "审核通过订单",
+                    type: 1,
+                    area: ['700px', '500px'],
+                    content: $('#order-box'),
+                })
+            })
+
+            //执行批量审核订单
+            form.on("submit(save-order)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/Finance/batchPassFreeOrder"
+                $('#tips').text('正在进行操作，请稍候！');
+                $.post(url, data.field, function (res) {
+                    $('#tips').html(res.info);
+                    _btn.disabled = false;
+                });
+                return false;
+            });
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr, 'select');
+                        }
+
+                    }
+                })
+            }
+
+            $("body").on("click", ".open-info", function () {
+                var url = $(this).data('url');
+                layui.layer.open({
+                    title: "京东免单详细信息",
+                    area: ['80%', '90%'],
+                    type: 2,
+                    content: url
+                })
+
+
+            })
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td align="center"><font style="color: #1AA094">' + data[i].mobile + '</font></td>'
+                                + '<td align="center"><font style="color: #1AA094">' + data[i].order_sn + '</font></td>'
+                                + '<td align="center">￥' + data[i].subsidy_money + '</td>'
+                                + '<td align="center">' + data[i].status_name + '</td>'
+                                + '<td align="center">申请时间：' + data[i].add_time + '<br/>补贴时间：' + data[i].subsidy_time + '</td>'
+                                + '<td align="left">' + data[i].remark + '</td>'
+                                + '<td align="center"><a class="layui-btn layui-btn-mini layui-btn-danger open-info" data-url="{:U(\'Finance/jdOrderDetail\')}?id=' + data[i].id + '"><i class="layui-icon">&#xe620;</i>审核</a></td>'
+                                + '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="6" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

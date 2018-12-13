@@ -1,0 +1,175 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline">
+            <a class="layui-btn auth-group-btn" style="background-color:#5FB878">添加权限组</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col width="15%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>权限组名称</th>
+                <th>权限组备注</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="js">
+    <script type="text/javascript">
+        /**
+         * Created by daipingshan on 2018/1/22.
+         */
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery;
+            var index = 0;
+            getData(1);
+            function getData(page) {
+                var count = 0;
+                var data = [];
+                $.get('/Admin/authGroup', {page: page}, function (res) {
+                    data = res.info.data;
+                    count = res.info.count;
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            $("body").on("click", ".auth-group-btn", function () {
+                var url = "/Admin/authGroupDisplay";
+                var index = layui.layer.open({
+                    title: "添加权限组",
+                    type: 2,
+                    content: url,
+                    success: function (layero, index) {
+                        setTimeout(function () {
+                            layui.layer.tips('点击此处返回权限组列表', '.layui-layer-setwin .layui-layer-close', {
+                                tips: 3
+                            });
+                        }, 500)
+                    }
+                })
+                //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                $(window).resize(function () {
+                    layui.layer.full(index);
+                })
+                layui.layer.full(index);
+            })
+
+            $("body").on("click", ".auth-group-edit", function () {
+                var id = $(this).data('id');
+                if (id > 0) {
+                    var url = "/Admin/authGroupDisplay?id=" + id;
+                    var index = layui.layer.open({
+                        title: "修改权限组",
+                        type: 2,
+                        content: url,
+                        success: function (layero, index) {
+                            setTimeout(function () {
+                                layui.layer.tips('点击此处返回权限组列表', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            }, 500)
+                        }
+                    })
+                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                    $(window).resize(function () {
+                        layui.layer.full(index);
+                    })
+                    layui.layer.full(index);
+                } else {
+                    layer.msg('权限组编号异常，无法编辑权限组');
+                }
+            })
+
+            $("body").on("click", ".auth-group-status", function () {  //删除
+                var _this = $(this);
+                layer.confirm('确定要更新当前权限组状态吗？', {icon: 3, title: '提示信息'}, function () {
+                    index = layer.msg('更新中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/Admin/setGroupStatus", {id: _this.data('id')}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                })
+            });
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td>' + data[i].title + '</td>'
+                                + '<td>' + data[i].remark + '</td>';
+                        if (data[i].status == 1) {
+                            dataHtml += '<td style="color:#5FB878">启用</td>'
+                                    + '<td>'
+                                    + '<a class="layui-btn layui-btn-mini auth-group-edit" data-id="' + data[i].id + '"><i class="iconfont icon-edit"></i> 编辑</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini auth-group-status" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i> 禁用</a>'
+                                    + '</td>';
+                        } else {
+                            dataHtml += '<td style="color:#f00">禁用</td>'
+                                    + '<td>'
+                                    + '<a class="layui-btn layui-btn-mini auth-group-edit" data-id="' + data[i].id + '"><i class="iconfont icon-edit"></i> 编辑</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini auth-group-status" data-id="' + data[i].id + '"><i class="layui-icon">&#x1005;</i> 启用</a>'
+                                    + '</td>';
+                        }
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="3" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

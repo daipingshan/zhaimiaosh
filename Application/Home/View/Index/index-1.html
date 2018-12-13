@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>宅喵生活，多彩生活</title>
+    <link rel="stylesheet" href="http://pic.zhaimiaosh.com/static/Home/css/jquery.fullPage.css">
+    <link rel="stylesheet" href="http://pic.zhaimiaosh.com/static/Home/css/style.css">
+    <link rel="stylesheet" href="http://pic.zhaimiaosh.com/static/Home/css/baoming.css">
+    <link rel="bookmark" href="http://pic.zhaimiaosh.com/static/Home/images/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="http://pic.zhaimiaosh.com/static/Home/images/favicon.ico"/>
+    <script src="http://pic.zhaimiaosh.com/static/Home/js/jquery-1.8.3.min.js"></script>
+    <script src="http://pic.zhaimiaosh.com/static/Home/js/jquery-ui.min.js "></script>
+</head>
+
+<body>
+
+<div class="nav" role="banner" style="position: absolute;top: 0;">
+    <div class="top-wrap">
+        <div class="top-logo">
+            <a class="logo" href="index.html" title="宅喵生活" data-no-retina="">
+                <img src="http://pic.zhaimiaosh.com/static/Home/images/zhaimiao.png" class="top-img"/>
+            </a>
+        </div>
+
+        <div class="menu-box">
+            <ul class="top-ul">
+                <li class="top-li">
+                    <a href="{:U('Index/index')}"><h2 class="text">首页</h2></a>
+                </li>
+                <li class="top-li">
+                    <a href="{:U('Index/describe')}"><h2 class="text">企业简介</h2></a>
+                </li>
+                <li class="top-li">
+                    <a href="{:U('Index/download')}"><h2 class="text">下载APP</h2></a>
+                </li>
+                <li class="top-li">
+                    <h2 class="text" id="tip2">联系电话：4000333178</h2>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="section section1">
+    <div class="bg"><img src="http://pic.zhaimiaosh.com/static/Home/images/1st.jpg" alt=""></div>
+</div>
+
+
+<div class="section section2">
+    <div class="bg"><img src="http://pic.zhaimiaosh.com/static/Home/images/2nd.jpg" alt=""></div>
+</div>
+
+
+<div class="section section4">
+    <div class="bg"><img src="http://pic.zhaimiaosh.com/static/Home/images/4th.jpg" alt=""></div>
+</div>
+
+
+<div class="section section5">
+    <div class="bg"><img src="http://pic.zhaimiaosh.com/static/Home/images/5th.jpg" alt=""></div>
+</div>
+
+
+<div class="section section6">
+    <div class="bg"><img src="http://pic.zhaimiaosh.com/static/Home/images/6th.jpg" alt=""></div>
+</div>
+
+<div class="section section7">
+    <div class="bg"><img src="http://pic.zhaimiaosh.com/static/Home/images/7th.jpg" alt=""></div>
+
+    <form class="handleForm" action="{:U('signUp')}" method="get"
+          enctype="multipart/form-data" onsubmit="return check_zhe();">
+        <div class="wrapper">
+            <div class="main" style="width: 100%;">
+                <div class="header">
+                    <div class="fb_headerInfo" style="padding-top:0px" tabindex="1">
+                        <div class="h_headline"><p>报名通道</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="body">
+
+                <div class="fb_componentWrapper">
+                    <div class="fb_component name">
+                        <div class="fb_componentText">
+                            <p class="fbc_title">
+                                <span>姓名</span>
+                                <span class="fbc_required" aria-label="(必填)">*</span>
+                            </p>
+                        </div>
+                        <div class="fb_componentBody">
+                            <div class="fbc_content fbc_widthCp">
+                                <div class="fbc_input has-icon">
+                                    <input class="fbi_input" tabindex="1" name="user" type="text" spellcheck="false"
+                                           id="user" value="" autocomplete="off"
+                                           style="width: 40%;float: left;margin-left: 70px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fb_component inputMulti">
+                        <div class="fb_componentText">
+                            <p class="fbc_title">
+                                <span>手机</span>
+                                <span class="fbc_required" tabindex="-1" aria-label="(必填)">*</span>
+                            </p>
+                        </div>
+                        <div class="fb_componentBody">
+                            <div class="fbc_content fbc_widthCp">
+                                <div class="fbc_imItem">
+                                    <div class="fbc_input has-icon">
+                                        <input class="fbi_input aria-content" name="mobile" tabindex="1" id="mobile"
+                                               type="text" spellcheck="false" autocomplete="off" value=""
+                                               style="width: 40%;float: left;margin-left: 70px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fb_component radio">
+                        <div class="fb_componentText">
+                            <p class="fbc_title">
+                                <span>报名类型</span>
+                                <span class="fbc_required" tabindex="-1" aria-label="(必填)">*</span>
+                            </p>
+                        </div>
+                        <div class="fb_componentBody">
+                            <div class="fbc_imItem">
+                                <div class="leixing">
+                                    <label>
+                                        <input type="radio" class="fbi_input aria" name="type" value="2"
+                                               checked="checked">
+                                        <span style="float: left;position: relative;top: -6px;"> 单店合伙人</span>
+                                    </label>
+                                </div>
+                                <div class="leixing">
+                                    <label>
+                                        <input type="radio" class="fbi_input aria" name="type" value="1"
+                                               checked="checked">
+                                        <span style="float: left;position: relative;top: -6px;"> 区域合伙人</span>
+                                    </label>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="submit" class="btn" value="提交">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div style="margin: 20px auto;text-align: left;width: 900px;position: relative;">
+
+        <p style="text-align: center;font-size: 30px;color: red;">常见问题</p>
+        <p class="question1">
+            1、宅喵生活有哪些优势？<img id="up1" src="http://pic.zhaimiaosh.com/static/Home/images/down.png" style="width: 10px;"/>
+        </p>
+        <p class="answer1" style="display: none;color: #777;">
+            答：1、统一商标、统一品牌形象、门店有升值性；2、平台大数据支撑，Top100帮您选品；3、一件也是批发价，打破传统供应链；4、增加线上收益渠道，线上线下双丰收；5、闲暇时间也有事儿做，推广商品也赚钱；6、门店商圈地点调查及评估，降低风险；7、有促销计划及开业规划有区域督导员进行门店指导；8、开业前对门店员工进行培训及上岗指导；9、开业后可进行门店营运指导及跟踪。
+        </p>
+
+        <p class="question2">
+            2、加盟宅喵生活有何保障？<img id="up2" src="http://pic.zhaimiaosh.com/static/Home/images/down.png"
+                              style="width: 10px;"/>
+        </p>
+        <p class="answer2" style="display: none;color: #777;">
+            答：统一的品牌效应扩大门店知名度，为门店带来更多顾客资源，强大的物流配送为门店经营保障；每逢节假日的促销活动为门提供免费的海报飘旗等，频繁的堆头特价以争取更大利润，不定期的培训增强门店的专业技能。
+        </p>
+
+        <p class="question3">
+            3、开业后，如果有一些很难销售的商品，公司会怎么帮忙处理？<img id="up3" src="http://pic.zhaimiaosh.com/static/Home/images/down.png"
+                                              style="width: 10px;"/>
+
+        </p>
+        <p class="answer3" style="display: none;color: #777;">
+            答：开业二个月内，指导员会协助店长依据具体情况进行商品结构调整。对于滞销的商品可以利用门店资源安排移库处理，假如无法移库，可以根据具体情况安排退货。
+        </p>
+
+        <p class="question4">
+            4、加盟后我要做些什么呢？<img id="up4" src="http://pic.zhaimiaosh.com/static/Home/images/down.png"
+                              style="width: 10px;"/>
+
+        </p>
+        <p class="answer4" style="display: none;color: #777;">
+            答：负责门店日常的经营、管理、包括员工招募、管理，电脑报货，顾客服务，门店形象维护等。
+        </p>
+
+        <p class="question5">
+            5、公司的信息系统有什么作用？<img id="up5" src="http://pic.zhaimiaosh.com/static/Home/images/down.png"
+                                style="width: 10px;"/>
+
+        </p>
+        <p class="answer5" style="display: none;color: #777;">
+            答：信息系统包括收银系统和营运数据支持系统两部分；收银系统主要实现门店日常快速准确的收银、解款和票据打印，营运数据支持系统主要为门店提供商品经营决策数据支持，帮助门店优化商品结构，提高库存周转率和毛利。
+        </p>
+
+    </div>
+    <script type="text/javascript">
+        var up_url = "http://pic.zhaimiaosh.com/static/Home/images/up.png";
+        var down_url = "http://pic.zhaimiaosh.com/static/Home/images/down.png";
+
+        $(".question1").click(function () {
+            document.getElementById("up1").src = down_url;
+            $(".answer1").slideToggle(300, close1());
+        });
+        $(".question2").click(function () {
+            document.getElementById("up2").src = down_url;
+            $(".answer2").slideToggle(300, close2());
+        });
+        $(".question3").click(function () {
+            document.getElementById("up3").src = down_url;
+            $(".answer3").slideToggle(300, close3());
+        });
+        $(".question4").click(function () {
+            document.getElementById("up4").src = down_url;
+            $(".answer4").slideToggle(300, close4());
+        });
+        $(".question5").click(function () {
+            document.getElementById("up5").src = down_url;
+            $(".answer5").slideToggle(300, close5());
+        });
+        function close1() {
+            if ($(".answer1").css("display") == 'none') {
+                document.getElementById("up1").src = up_url;
+            }
+            $('.answer2').hide();
+            $('.answer3').hide();
+            $('.answer4').hide();
+            $('.answer5').hide();
+        }
+        function close2() {
+            if ($(".answer2").css("display") == 'none') {
+                document.getElementById("up2").src = up_url;
+            }
+            $('.answer3').hide();
+            $('.answer1').hide();
+            $('.answer4').hide();
+            $('.answer5').hide();
+        }
+        function close3() {
+            if ($(".answer3").css("display") == 'none') {
+                document.getElementById("up3").src = up_url;
+            }
+            $('.answer1').hide();
+            $('.answer2').hide();
+            $('.answer4').hide();
+            $('.answer5').hide();
+        }
+        function close4() {
+            if ($(".answer4").css("display") == 'none') {
+                document.getElementById("up4").src = up_url;
+            }
+            $('.answer1').hide();
+            $('.answer2').hide();
+            $('.answer3').hide();
+            $('.answer5').hide();
+        }
+        function close5() {
+            if ($(".answer5").css("display") == 'none') {
+                document.getElementById("up5").src = up_url;
+            }
+            $('.answer1').hide();
+            $('.answer2').hide();
+            $('.answer3').hide();
+            $('.answer4').hide();
+        }
+    </script>
+
+    <div style="margin: 20px auto;text-align: left;width: 900px;position: relative;">
+        <p style="text-align: center;font-size: 30px;color: red;">加盟宅喵生活所需条件</p>
+        <p>1、须是中华人民共和国合法的公民，并具有独立的法人资格，有良好的个人品质和信誉，同时还应具有良好的商业信誉和商业道德；<br/></p>
+        <p>2、具有零售管理理念，能服从统一管理，自觉维护宅喵生活的品牌形象；<br/></p>
+        <p>3、有相应的投资能力和风险意识，具备创业精神，有持久的干劲和毅力；<br/></p>
+        <p>4、对便利店有一定了解，理解并认同宅喵生活的品牌文化和经营模式；<br/></p>
+        <p>5、具备一定的资金实力；<br/></p>
+        <p>6、有能力贯彻落实公司对加盟店的工作要求，满足加盟店经营要求：经营场地需要满足一定的面积要求。<br/></p>
+    </div>
+
+    <div class="foot">
+        <div class="j-center-block">
+            <div class="link-list">
+                <div class="column-1 column">
+                    <span class="title">友情链接</span>
+                    <ul>
+                        <li>
+                            <a target="_blank" href="http://www.taodianke.com">淘店客官网</a>
+                        </li>
+                        <li><a target="_blank" href="http://xian.youngt.com">青团网</a></li>
+                        <li>
+                            <a target="_blank" href="http://kd.youngt.com">青团快店</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="column-2 column">
+                    <span class="title">关于我们</span>
+                    <ul>
+                        <li>
+                            <a rel="nofollow" href="describe.html">公司简介</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="column-3 column">
+                    <span class="title">联系我们</span>
+                    <ul>
+                        <li>联系电话:
+                            <a href="tel:4000333178">4000333178</a>
+                        </li>
+                        <li>商务QQ：3405981934
+                        </li>
+                    </ul>
+                </div>
+                <div class="column-4 column">
+                    <img src="http://pic.zhaimiaosh.com/static/Home/images/qrcode.png" width="100" height="100">
+                </div>
+            </div>
+            <div class="info-wrapper">
+                <img src="http://pic.zhaimiaosh.com/static/Home/images/zhaimiao.png" class="company-logo">
+                <p class="company-name">陕西三多网络科技有限公司</p>
+                <p class="copyright">Copyright 2017&nbsp;&nbsp;
+                    <a class="copyright-link" href="http://shxcainfo.miitbeian.gov.cn/publish/query/indexFirst.action"
+                       target="_blank">
+                        陕ICP备170170765号-1
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function check_zhe() {
+        // 手机号正则匹配
+        var number = /^1[34578]\d{9}$/;
+        var user = $("#user").val();
+        var mobile = $("#mobile").val();
+        if (user == '') {
+            alert('姓名不能为空');
+            return false;
+        } else if (mobile == '') {
+            alert('手机号不能为空');
+            return false;
+        } else if (!(number.test(mobile))) {
+            alert('您的手机号输入的格式不正确，请确认后重新输入');
+            return false;
+        }
+        $.post($('form').attr('action'), $('form').serialize(), function (res) {
+            alert(res.info);
+            if (res.status == 1) {
+                setTimeout(function () {
+                    window.location.href = "{:U('index')}";
+                }, 2000)
+            }
+        })
+        return false;
+    }
+</script>
+<script>
+    /*拖动滚动条或滚动鼠标轮*/
+    window.onscroll = function () {
+        if (document.body.scrollTop || document.documentElement.scrollTop > 0) {
+            document.getElementById('rTop').style.display = "block"
+        } else {
+            document.getElementById('rTop').style.display = "none"
+        }
+    }
+    /*点击“回到顶部”按钮*/
+    function toTop() {
+        window.scrollTo('0', '0');
+        document.getElementById('rTop').style.display = "none"
+    }
+</script>
+<style type="text/css">
+    .rTop {
+        position: fixed;
+        right: 1rem;
+        bottom: 2rem;
+    }
+
+    .img {
+        width: 40%;
+        height: 40%
+    }
+</style>
+<div class="rTop" id="rTop" onClick="toTop()"><img src="images/top.png" class="img"></div>
+
+
+</body>
+</html>

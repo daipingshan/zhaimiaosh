@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>京东免单订单查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="__API__/mui/css/mui.min.css">
+    <!--App自定义的css-->
+    <link rel="stylesheet" type="text/css" href="__API__/mui/css/app.css"/>
+    <style>
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+        }
+
+        input {
+            line-height: 50px;
+        }
+
+        .mui-input-group {
+            padding: 20px;
+        }
+
+        .mui-input-row, .mui-button-row {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<!--<header class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">京东免单专场</h1>
+</header>-->
+
+<div class="mui-content">
+    <div class="logo">
+        <img src="__API__/mui/image/zhaimiao-logo.png" style="width: 150px;height: 150px">
+    </div>
+    <form class="mui-input-group">
+        <div class="mui-input-row">
+            <label>订单号</label>
+            <input type="text" name="order_sn" placeholder="请输入京东订单号">
+        </div>
+        <div class="mui-button-row">
+            <button type="button" class="mui-btn mui-btn-primary" style="padding:10px 20px " onclick="getOrderInfo()">
+                确认
+            </button>
+        </div>
+    </form>
+    <div class="mui-card" style="margin-bottom: 35px;">
+        <ul class="mui-table-view">
+        </ul>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="__API__/mui/js/mui.min.js"></script>
+<script>
+    $(function () {
+        $('input[name=order_sn]').focus(function () {
+            var table = document.body.querySelector('.mui-table-view');
+            table.innerHTML = '';
+        })
+    })
+
+    function getOrderInfo() {
+        var order_sn = $('input[name=order_sn]').val();
+        if (!order_sn) {
+            mui.toast('请输入订单号！');
+            return false;
+        }
+        $.get("{:U('getOrderInfo')}", {order_sn: order_sn}, function (res) {
+            if (res.code == 'success') {
+                var table = document.body.querySelector('.mui-table-view');
+                $('input[name=order_sn]').val('');
+                var data = res.data;
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    var li = document.createElement('li');
+                    li.className = 'mui-table-view-cell';
+                    li.innerHTML = '<p>订单编号：' + data[i].order_sn + '</p><p>订单状态：' + data[i].pay_status_view + '</p><p>商品标题：' + data[i].title + '</p><p>商品价格：' + data[i].total_money + '</p>';
+                    table.appendChild(li);
+                }
+            } else {
+                mui.toast(res.msg);
+            }
+        }, 'json')
+    }
+</script>
+</html>

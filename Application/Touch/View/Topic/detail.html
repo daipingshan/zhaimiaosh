@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="{$desc}" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>{$title}</title>
+    <link href="__CSS__/style.css" rel="stylesheet" />
+    <link href="__CSS__/preload.css" rel="stylesheet" />
+    <script>
+        var deviceWidth = document.documentElement.clientWidth;
+        if (deviceWidth > 750) deviceWidth = 750;
+        document.documentElement.style.fontSize = deviceWidth / 7.5 + "px";
+        document.documentElement.style.width = "100%";
+    </script>
+</head>
+<body>
+<style>
+    a:link{color:#666;}
+    a:active{color:#666;}
+    a:visited{color:#666;}
+    a:hover{color:#666;}
+    .pic {
+        margin: 0 auto;
+    }
+    .title {
+        position: absolute;
+        top: 45px;
+        text-align: center;
+        width: 100%;
+        font-size: 20px;
+    }
+    .content{
+        margin: 0 auto;
+        width: 260px;
+    }
+</style>
+<div id="containter" class="container">
+
+    <div class="pic">
+        <img src="http://pic.taodianke.com/static/Touch/images/share_bg.png"/>
+        <span class="title">
+            <p class="content">{$title}</p>
+        </span>
+    </div>
+
+    <div class="goods_list index_goodslist">
+        <section class="goods" id="pageCon">
+            <ul id="list_box" class="list_box">
+                <volist name='items_list' id='item'>
+                <li class="relative">
+                    <a href="{$item['item_url']}">
+                        <div class="goods_pic">
+                            <div class="allpreContainer">
+                                <div class="inoutbg" style="opacity: 0; background-image: url({$item['pic_url']}); background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"></div>
+                                <div class="DSbg" style="opacity: 1; background-image: url({$item['pic_url']}); background-size: cover; background-position: 50% 50%; background-repeat: no-repeat;"></div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="goods_bottom">
+                        <div><a class="goods_text" href="{$item['item_url']}">{$item['title']}</a></div>
+                        <a href="{$item['item_url']}">
+                            <if condition="$item['shop_type'] eq 'C'">
+                                <div class="comefrom">天猫</div>
+                            <elseif condition="$item['shop_type'] eq 'J'"/>
+                                <div class="comefrom" style="background: url(__IMG__/chuchu.png) no-repeat left center/15px;">楚楚街</div>
+                            <else/>
+                                <div class="comefrom" style="background: url(__IMG__/taobao.png) no-repeat left center/15px;">淘宝</div>
+                            </if>
+
+                            <div style=" position: absolute;top:60px;left: 10px;font-size:12px;">
+                                销量：{$item['volume']}
+                            </div>
+                            <div style=" position: absolute;top:73px;left: 10px;font-size:12px;">
+                                原价：¥{$item['price']}
+                            </div>
+                        </a>
+                        <a href="{$item['item_url']}">
+                            <div class="goodspc">
+                                <div class="goods_price">
+                                    <span style="font-size:12px;color: #969696">券后价</span>
+                                    <span style="font-size:12px;">¥</span><span>{$item['coupon_price']}</span>
+                                </div>
+                                <div class="new-coupon">
+                                    <span>马上领劵</span><span>立减<em class="ljmoney">{$item['quan']}</em>元</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </li>
+            </volist>
+            </ul>
+        </section>
+    </div>
+
+</div>
+
+</body>
+</html>

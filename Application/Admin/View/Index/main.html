@@ -1,0 +1,113 @@
+<extend name="Common/common"/>
+<block name="css">
+    <link rel="stylesheet" href="__CSS__/main.css" media="all"/>
+</block>
+<block name="body">
+    <div class="panel_box row">
+        <div class="panel col">
+            <a href="javascript:;" data-url="/Order/index">
+                <div class="panel_icon">
+                    <i class="layui-icon" data-icon="&#xe63a;">&#xe63a;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span>{$data.order_num}</span>
+                    <cite>今日新增订单数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col">
+            <a href="javascript:;" data-url="/User/index">
+                <div class="panel_icon" style="background-color:#FF5722;">
+                    <i class="iconfont icon-dongtaifensishu" data-icon="icon-dongtaifensishu"></i>
+                </div>
+                <div class="panel_word userAll">
+                    <span>{$data.new_user_num}</span>
+                    <cite>今日新增人数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col">
+            <a href="javascript:;" data-url="/User/index">
+                <div class="panel_icon" style="background-color:#009688;">
+                    <i class="layui-icon" data-icon="&#xe613;">&#xe613;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span>{$data.user_num}</span>
+                    <cite>用户总数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col">
+            <a href="javascript:;" data-url="/User/index">
+                <div class="panel_icon" style="background-color:#5FB878;">
+                    <i class="layui-icon" data-icon="&#xe64a;">&#xe64a;</i>
+                </div>
+                <div class="panel_word imgAll">
+                    <span>{$data.check_user_num}</span>
+                    <cite>待审核用户数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col">
+            <a href="javascript:;" data-url="/Finance/index">
+                <div class="panel_icon" style="background-color:#F7B824;">
+                    <i class="iconfont icon-wenben" data-icon="icon-wenben"></i>
+                </div>
+                <div class="panel_word waitNews">
+                    <span>{$data.pay_num}</span>
+                    <cite>待打款总笔数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel">
+            <a href="javascript:;" data-url="/Finance/index">
+                <div class="panel_icon" style="background-color:#2F4056;">
+                    <i class="iconfont icon-text" data-icon="icon-text"></i>
+                </div>
+                <div class="panel_word allNews">
+                    <span>{$data.pay_money}</span>
+                    <em>待打款总金额</em>
+                    <cite>待打款总金额</cite>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row" style="padding: 0 10px">
+        <blockquote class="layui-elem-quote title">今日收益排行榜<i class="iconfont icon-new1"></i></blockquote>
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col width="110">
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">排行编号</th>
+                <th style="text-align:center;">手机号码</th>
+                <th style="text-align:center;">用户昵称</th>
+                <th style="text-align:center;">邀请人数</th>
+                <th style="text-align:center;">注册时间</th>
+                <th style="text-align:center;">收益金额</th>
+            </tr>
+            </thead>
+            <tbody class="hot_news">
+            <volist name="data.day_list" id="row">
+                <tr>
+                    <td align="center">
+                        <button class="layui-btn layui-btn-danger" style="width: 30px;height: 30px;border-radius: 50%;padding: 0;line-height: 30px">{$key+1}</button>
+                    </td>
+                    <td align="center">{$row.mobile}</td>
+                    <td align="center">{$row.nickname}</td>
+                    <td align="center">{$row.invite_a_num} | {$row.invite_b_num}</td>
+                    <td align="center">{$row.add_time|date="Y-m-d H:i",###}</td>
+                    <td align="center" style="color: #5FB878">¥{$row.money}</td>
+                </tr>
+            </volist>
+
+            </tbody>
+        </table>
+    </div>
+</block>

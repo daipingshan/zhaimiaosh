@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="keywords" content="升级说明">
+    <meta name="description" content="升级说明">
+    <link href="__API__/static/reset.css" rel="stylesheet" type="text/css"/>
+    <title>升级说明</title>
+    <script src="__API__/static/rem.js"></script>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .header-user {
+            width: 100%;
+            position: relative;
+        }
+
+        .header-user img {
+            width: 100%;
+        }
+
+        .header-user p {
+            width: 54%;
+            position: absolute;
+            color: #fff;
+            font-size: .25rem;
+            line-height: .4rem;
+            font-weight: 300;
+            top: .4rem;
+            left: .6rem;
+        }
+
+        .content-user-box {
+            width: 100%;
+            background: #fff;
+        }
+
+        .grade-text {
+            width: 100%;
+            padding: .2rem .4rem;
+            border-bottom: 1px solid #e5e5e5;
+            box-sizing: border-box;
+        }
+
+        .grade-text h3 {
+            font-size: .25rem;
+            font-weight: 700;
+            line-height: .5rem;
+        }
+
+        .grade-text p {
+            font-size: .2rem;
+            line-height: .4rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<!--tab-->
+<div class="header-user">
+    <img src="__API__/static/top-banner.png">
+    <p>每个人都可以分享邀请其他人注册，被邀请的人下单邀请者可获得平台展示收入的20%。</p>
+</div>
+<div class="content-user-box">
+    <div class="grade-text">
+        <h3>邀请1人可升级为V1推广员</h3>
+        <p>V1推广员权益：自己或分享出去别人下单可获得平台展示的100%收入+被邀请者下单平台返利{$data['son_commission_rate']*2}%（此为平台补贴返利）</p>
+    </div>
+    <div class="grade-text">
+        <h3>直接邀请{$data.v2_people_num}人可升级为V2推广员</h3>
+        <p>V2推广员权益：V1推广员权益+邀请下级的人下单平台额外补贴{$data['v2_award']*2}%（限补一个月）</p>
+    </div>
+    <div class="grade-text">
+        <h3>直接邀请{$data.v3_people_num}人可升级为V3推广员</h3>
+        <p>V3推广员权益：V1推广员权益+邀请下级的人下单平台额外补贴{$data['v3_award']*2}%（限补一个月）</p>
+    </div>
+    <div class="grade-text">
+        <h3>直接邀请{$data.v4_people_num}人可升级为V4推广员</h3>
+        <p>V4推广员权益：V1推广员权益+邀请下级的人下单平台额外补贴{$data['v4_award']*2}%（限补一个月）</p>
+    </div>
+    <div class="grade-text">
+        <h3>直接邀请{$data.group_leader_num}人及下级推广员邀请200人以上可升级为团长</h3>
+        <p>团长权益：V1推广员权益+平台返利所有被邀请人及其以下所有级别的{$data['group_leader']*2}%</p>
+    </div>
+    <div class="grade-text">
+        <h3>团长级别旗下的人升级成为团长后，平台也会继续补贴下级团长所获佣金的{$data['group_leader_parent']*2}%</h3>
+    </div>
+</div>
+</body>
+<script>
+    var height = document.documentElement.clientHeight;
+    document.body.style.height = height + 'px';
+</script>
+</html>

@@ -1,0 +1,339 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="real_name" value="" placeholder="请输入真实姓名"
+                       class="layui-input search_real_name">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="bank_account" value="" placeholder="请输入提现账号"
+                       class="layui-input search_bank_account">
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select search_status">
+                    <option value="">请选择提现状态</option>
+                    <foreach name="status_arr" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="platform_id" class="layui-select search_platform_id">
+                    <option value="all">全部平台</option>
+                    <option value="taobao">淘宝</option>
+                    <option value="pinduoduo">拼多多</option>
+                    <option value="jingdong">京东</option>
+                </select>
+            </div>
+            <br>
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <select name="time_type" class="layui-select search_time_type">
+                    <option value="all">时间类型</option>
+                    <option value="add_time">申请时间</option>
+                    <option value="settle_time">结算时间</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="start_time" id="date-picker-start" value="" placeholder="起始值"
+                       class="layui-input search_start_time">
+            </div>
+            <div class="layui-input-inline" style="margin: 10px 10px 0 0;">
+                <input type="text" name="end_time" id="date-picker-end" value="" placeholder="结束值"
+                       class="layui-input search_end_time">
+            </div>
+            <a class="layui-btn search_btn" data-type="select" style="margin: 10px 10px 0 0;">查询</a>
+            <a class="layui-btn layui-btn-danger search_btn" data-type="down" style="margin: 10px 10px 0 0;">导出</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col width="15%">
+                <col>
+                <col width="20%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">支付宝</th>
+                <th style="text-align:center;">真实姓名</th>
+                <th style="text-align:center;">提现金额</th>
+                <th style="text-align:center;">结算状态</th>
+                <th style="text-align:center;">申请时间</th>
+                <th style="text-align:center;">打款时间</th>
+                <th style="text-align:center;">异常原因</th>
+                <th style="text-align:center;">平台/用户</th>
+                <th style="text-align:center;">操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="box">
+    <div id="box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width:80%;" name="save-withdraw☺">
+            <div class="layui-form-item">
+                <label class="layui-form-label">异常原因</label>
+                <div class="layui-input-block">
+                    <textarea type="text" name="remark" class="layui-textarea" lay-verify="required"
+                              placeholder="请输入打款异常原因"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0" id="withdraw_id"/>
+                    <input type="hidden" name="status" value="2"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="save-withdraw">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage', 'laydate'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery,
+                    laydate = layui.laydate;
+            var start = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas //将结束日的初始值设定为开始日
+                }
+            };
+
+            var end = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                }
+            };
+
+            document.getElementById('date-picker-start').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            };
+            document.getElementById('date-picker-end').onclick = function () {
+                end.elem = this;
+                laydate(end);
+            };
+            var index = 0;
+            getData(1, 'select');
+            function getData(page, search_type) {
+                var count = 0;
+                var data = [];
+                param = {
+                    real_name: $('.search_real_name').val(),
+                    bank_account: $('.search_bank_account').val(),
+                    status: $('.search_status option:selected').val(),
+                    platform: $('.search_platform_id option:selected').val(),
+                    time_type: $('.search_time_type option:selected').val(),
+                    start_time: $('.search_start_time').val(),
+                    end_time: $('.search_end_time').val(),
+                    search_type: search_type,
+                    page: page
+                };
+                if (param.status == 0 && param.time_type == 'settle_time') {
+                    layer.msg('提现状态为【未结算】时不能根据【结算时间】筛选');
+                    return false;
+                }
+                if (param.time_type && param.time_type != 'all') {
+                    if (param.start_time == '' || param.end_time == '') {
+                        layer.msg('开始，结束时间必须选择');
+                        return false;
+                    }
+                }
+                if (search_type == 'down') {
+                    var tmp = [];
+                    for (var key in param) {
+                        if (param[key]) {
+                            tmp.push(key + '=' + param[key]);
+                        }
+                    }
+                    var url_param = tmp.join('&');
+                    if (url_param) {
+                        url_param.substr(1);
+                    }
+                    var location_url = "/Finance/index?" + url_param;
+                    location.href = location_url;
+                } else {
+                    $.get('/Finance/index', param, function (res) {
+                        data = res.info.data;
+                        count = res.info.count;
+                        $(".links_content").html(renderDate(data));
+                        if (index) {
+                            layer.close(index);
+                        }
+                        if (page == 1) {
+                            pages(count);
+                        }
+                    })
+                }
+            }
+
+            //查询
+            $(".search_btn").click(function () {
+                if ($(this).data('type') == 'select') {
+                    index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                }
+                getData(1, $(this).data('type'));
+            })
+
+            //操作
+            $("body").on("click", ".set-status-unpay", function () {
+                $('#withdraw_id').val($(this).data('id'));
+                layui.layer.open({
+                    title: "设置打款异常",
+                    type: 1,
+                    area: ['600px', '260px'],
+                    content: $('#box'),
+                })
+            })
+
+            form.on("submit(save-withdraw)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/Finance/setStatus";
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            $("body").on("click", ".set-status-pay", function () {  //删除
+                var _this = $(this);
+                var msg = '确定给用户【' + _this.data('name') + '】支付宝账号【' + _this.data('account') + '】打款【¥' + _this.data('money') + '】元?';
+                layer.confirm(msg, {icon: 3, title: '提示信息'}, function () {
+                    index = layer.msg('打款中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/Finance/setStatus", {id: _this.data('id'), status: 1}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                })
+            });
+            $("body").on("click", ".open-user-info", function () {
+                var user_id = $(this).data('id');
+                if (user_id > 0) {
+                    var url = "/User/userInfo?user_id=" + user_id;
+                    var index = layui.layer.open({
+                        title: "查看用户信息",
+                        type: 2,
+                        content: url,
+                        success: function (layero, index) {
+                            setTimeout(function () {
+                                layui.layer.tips('点击此处返回提现列表', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            }, 500)
+                        }
+                    })
+                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                    $(window).resize(function () {
+                        layui.layer.full(index);
+                    })
+                    layui.layer.full(index);
+                } else {
+                    layer.msg('用户编号异常，无法查看用户信息');
+                }
+            })
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr, 'select');
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var platform;
+                        switch (data[i].account_balance_mall_platform) {
+                            case 'taobao':
+                                platform = '淘宝';
+                                break;
+                            case 'pinduoduo':
+                                platform = '拼多多';
+                                break;
+                            case 'jingdong':
+                                platform = '京东';
+                                break;
+                            default:
+                                platform = '未知';
+                        }
+                        dataHtml += '<tr>'
+                                + '<td align="center">' + data[i].bank_account + '</td>'
+                                + '<td align="center">' + data[i].bank_account_real_name + '</td>'
+                                + '<td align="center">¥' + data[i].money + '</td>'
+                                + '<td align="center">' + data[i].status_name + '</td>'
+                                + '<td align="center">' + data[i].add_time + '</td>'
+                                + '<td align="center">' + data[i].settle_time + '</td>'
+                                + '<td align="center">' + data[i].remark + '</td>'
+                                + '<td align="center">平台：' + platform + '<br><a class="layui-btn layui-btn-normal layui-btn-mini open-user-info" data-id="' + data[i].user_id + '"><i class="layui-icon">&#xe60a;</i> 用户详情</a> </td>';
+                        if (data[i].status == 0) {
+                            dataHtml += '<td>'
+                                    + '<a class="layui-btn layui-btn-mini set-status-pay" data-id="' + data[i].id + '" data-name="' + data[i].bank_account_real_name + '" data-account="' + data[i].bank_account + '" data-money="' + data[i].money + '"><i class="iconfont icon-edit"></i> 立即打款</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini set-status-unpay" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i> 设置异常</a>'
+                                    + '</td>';
+                        } else if (data[i].status == 1) {
+                            dataHtml += '<td align="center"><a class="layui-btn layui-btn-small"><i class="layui-icon">&#xe605;</i>已打款</a></td>'
+                        } else {
+                            dataHtml += '<td><a class="layui-btn layui-btn-mini set-status-pay" data-id="' + data[i].id + '" data-name="' + data[i].new_bank_account_real_name + '" data-account="' + data[i].new_bank_account + '" data-money="' + data[i].money + '"><i class="iconfont icon-edit"></i> 重新打款</a></td>';
+                        }
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="9" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

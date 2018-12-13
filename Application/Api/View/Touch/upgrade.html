@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>等级说明</title>
+</head>
+<style type="text/css">
+    table
+    {
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+    em,i,th,td,h3,p {
+        font-family: "微软雅黑";
+        font: 14px/21px "Open Sans", Arial, sans-serif;
+        color: #141414;
+        font-weight: lighter;
+        font-style: normal;
+    }
+    a {
+        text-decoration: none;
+    }
+    h3 {
+        font-weight: bold;
+    }
+    .top_background{
+        background: -webkit-linear-gradient(left, #ff4a68, #ff1849);
+        background: -o-linear-gradient(left, #ff4a68, #ff1849);
+        background: -moz-linear-gradient(left, #ff4a68, #ff1849);
+        background: -ms-linear-gradient(left, #ff4a68, #ff1849);
+        padding: 1em 2em;
+    }
+    .top_background>em {
+        color: #FFFFFF;
+        overflow: hidden;
+        padding-top: 1.5em;
+        padding-bottom: 1em;
+        display: block;
+    }
+    .top_background>em:first-child i {
+        color: #FFFFFF;
+        font-size: 1.1em;
+        font-weight: 500;
+    }
+    .top_background>em span {
+        color: #FFFFFF;
+        font-weight: 600;
+        font-size: 1.3em;
+    }
+    .top_background>p {
+        font: 14px/21px "Open Sans", Arial, sans-serif;
+        line-height: 1.75em;
+        color: #FFFFFF;
+    }
+    th {
+        padding: 0.5em 0em;
+        background: #ffebcf;
+    }
+    td {
+        text-align: center;
+        padding: 0.5em 0em;
+    }
+    tr,td,th{
+        border: 1px solid #C0C0C0;
+        border-collapse :collapse ;
+        padding: 4px;
+    }
+    .title_change {
+        width: 90%;
+        margin: 0 auto;
+        padding-bottom: 2em;
+    }
+    .title_change>h3 {
+        font-size: 1em;
+        margin:1em 0px 1em;
+    }
+    .title_change>p {
+        margin: 8px 0px;
+        padding-left: 1em;
+        font: 14px/21px "Open Sans", Arial, sans-serif;
+        line-height: 1.5em;
+        color: #141414;
+    }
+    .share_btn {
+        width: 14em;
+        margin: 0 auto;
+        text-align: center;
+        border-radius: 10px;
+        margin-bottom: 2em;
+        margin-top: 2em;
+        background: -webkit-linear-gradient(top, #ff4a68, #ff1849);
+        background: -o-linear-gradient(top, #ff4a68, #ff1849);
+        background: -moz-linear-gradient(top, #ff4a68, #ff1849);
+        background: -ms-linear-gradient(top, #ff4a68, #ff1849);
+    }
+    .share_btn>a {
+        display: block;
+        font-size: 1em;
+        color: #FFFFFF;
+        padding: 0.5em 0em;
+    }
+    table {
+        margin: 0;
+    }
+</style>
+<body>
+    <div class="top_background">
+        <em><i>您当前享受的权益：</i><span>{$level_name}权益</span></em>
+        <p>{$tips}</p>
+    </div>
+    <div class="center_table" cellspacing="0" style="width: 90%;margin: 0 auto;margin-top: 1.5em;">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+              <th style="width: 30%;">等 级</th>
+              <th style="width: 70%;">升级条件</th>
+            </tr>
+            <tr>
+              <td>V1推广员</td>
+              <td>邀请满1人</td>
+            </tr>
+            <tr>
+              <td>V2推广员</td>
+              <td>邀请满{$data['v2_people_num']}人</td>
+            </tr>
+            <tr>
+              <td>V3推广员</td>
+              <td>邀请满{$data['v3_people_num']}人</td>
+            </tr>
+            <tr>
+              <td>V4推广员</td>
+              <td>邀请满{$data['v4_people_num']}人</td>
+            </tr>
+            <tr>
+              <td>团 长</td>
+              <td>直接邀请满{$data['group_leader_num']}人，间接邀请满{$data['group_leader_num']*2}人</td>
+            </tr>
+        </table>
+    </div>
+    <!--=======================================================-->
+    <div class="center_table" style="width: 90%;margin: 0 auto;margin-top: 1em;">
+        <table style="width: 100%;">
+            <tr style="width: 100%;">
+              <th style="width: 30%;">等 级</th>
+              <th style="width: 70%;">奖励分成</th>
+            </tr>
+            <tr>
+              <td>V1推广员</td>
+              <td>自购100% + 下级推广员下单收益{$data['son_commission_rate']/$data['base_commission_rate']*100}%</td>
+            </tr>
+            <tr>
+              <td>V2推广员</td>
+              <td>自购100% + 下级推广员下单收益{$data['son_commission_rate']/$data['base_commission_rate']*100}% + 平台补{$data['v2_award']/$data['base_commission_rate']*100}%（限1个月）</td>
+            </tr>
+            <tr>
+              <td>V3推广员</td>
+              <td>自购100% + 下级推广员下单收益{$data['son_commission_rate']/$data['base_commission_rate']*100}% + 平台补{$data['v3_award']/$data['base_commission_rate']*100}%（限1个月）</td>
+            </tr>
+            <tr>
+              <td>V4推广员</td>
+              <td>自购100% + 下级推广员下单收益{$data['son_commission_rate']/$data['base_commission_rate']*100}% + 平台补{$data['v4_award']/$data['base_commission_rate']*100}%（限1个月）</td>
+            </tr>
+            <tr>
+              <td>团 长</td>
+              <td>自购100% + 下级推广员下单收益{$data['son_commission_rate']/$data['base_commission_rate']*100}% + 团队所有成员收益的{$data['group_leader']/$data['base_commission_rate']*100}%</td>
+            </tr>
+            <tr><td colspan="2">当团长下级升级为团长后，只补贴下级团长所在团队所有成员收益得佣金的{$data['group_leader_parent']/$data['base_commission_rate']*100}%</td></tr>
+        </table>
+    </div>
+    <!--========================================-->
+    <div class="title_change">
+        <h3>等级说明</h3>
+        <p>1、用户等级变更根据实际推广人数的变动而调整；</p>
+        <p>2、奖励比例随等级调整，等级越高奖励分成比例越高；</p>
+        <p>3、团长奖励分成：{$data['son_commission_rate']/$data['base_commission_rate']*100}%+{$data['group_leader']/$data['base_commission_rate']*100}%（{$data['group_leader']/$data['base_commission_rate']*100}%：指所有团队成员佣金的{$data['group_leader']/$data['base_commission_rate']*100}%）；</p>
+        <p>4、团长的团队成员包含有：下级、下下级以及无限下下级；</p>
+    </div>
+</body>
+</html>

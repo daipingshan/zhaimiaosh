@@ -1,0 +1,97 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="id" class="layui-input search-title" lay-verify="required"
+                       placeholder="请输入大淘客商品ID或淘宝ID" style="width: 300px" value="{:I('get.id')}">
+            </div>
+            <a class="layui-btn search_btn">采集</a>
+        </div>
+    </blockquote>
+    <notEmpty name="info">
+        <fieldset class="layui-elem-field">
+            <legend>查询到的数据</legend>
+            <div class="layui-field-box">
+                <table class="layui-table" lay-even="" lay-skin="nob">
+                    <colgroup>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td>商品图片</td>
+                        <td><img src="{$info.Pic}" style="width: 100px" class="img-responsive"/></td>
+                    </tr>
+                    <tr>
+                        <td>商品标题</td>
+                        <td>{$info.Title}</td>
+                    </tr>
+                    <tr>
+                        <td>大淘客链接</td>
+                        <td><a href="http://www.dataoke.com/item?id={$info.ID}" target="_blank">http://www.dataoke.com/item?id={$info.ID}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>商品地址</td>
+                        <td><a href="https://item.taobao.com/item.htm?id={$info.GoodsID}" target="_blank">https://item.taobao.com/item.htm?id={$info.GoodsID}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>领券地址</td>
+                        <td><a href="{$info.Quan_link}" target="_blank">{$info.Quan_link}</a></td>
+                    </tr>
+                    <tr>
+                        <td>月销量</td>
+                        <td>{$info.Sales_num}</td>
+                    </tr>
+                    <tr>
+                        <td>券后价</td>
+                        <td>{$info.Price}元</td>
+                    </tr>
+                    <tr>
+                        <td>优惠券</td>
+                        <td>{$info.Quan_price}元</td>
+                    </tr>
+                    <tr>
+                        <td>优惠券结束日期</td>
+                        <td>{$info.Quan_time}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </fieldset>
+    </notEmpty>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery;
+
+            //查询
+            var error = "{$error}";
+            if (error) {
+                layer.alert(error, {icon: 2});
+            }
+            var success = "{$success}";
+            if (success) {
+                layer.alert(success,{icon: 1});
+            }
+            $(".search_btn").click(function () {
+                var id = $('input[name=id]').val();
+                if (!id) {
+                    layer.msg('请输入商品ID！');
+                    return false;
+                }
+                var url = "/Item/searchItem?id=" + id;
+                window.location.href = url;
+            })
+        });
+    </script>
+</block>

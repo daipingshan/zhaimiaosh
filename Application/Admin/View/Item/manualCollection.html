@@ -1,0 +1,239 @@
+<extend name="Common/common"/>
+<block name="body">
+    <div style="width: 48%;float: left">
+        <fieldset class="layui-elem-field">
+            <legend>手工采集商品功能</legend>
+            <div class="layui-field-box" style="margin-top: 20px">
+                <div class="layui-form">
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">编辑器</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea" name="content" lay-verify="content"
+                                      placeholder="商品id/链接/第三方软件" rows="10">{:I('get.content')}</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="get-item">一键识别</button>
+                        </div>
+                    </div>
+                </div>
+                <notEmpty name="info">
+                    <div class="layui-field-box">
+                        <table class="layui-table" lay-even="" lay-skin="nob">
+                            <colgroup>
+                                <col>
+                                <col>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td>商品图片</td>
+                                <td><img src="{$info.pict_url}" style="width: 100px" class="img-responsive"/></td>
+                            </tr>
+                            <tr>
+                                <td>商品标题</td>
+                                <td>{$info.title}</td>
+                            </tr>
+                            <tr>
+                                <td>商品地址</td>
+                                <td><a href="{$info.item_url}" target="_blank">{$info.item_url}"</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>商品价格</td>
+                                <td>{$info.zk_final_price}元</td>
+                            </tr>
+                            <tr>
+                                <td>卖家昵称</td>
+                                <td>{$info.nick}</td>
+                            </tr>
+                            <tr>
+                                <td>月销量</td>
+                                <td>{$info.volume}</td>
+                            </tr>
+                            <tr>
+                                <td>分类名称</td>
+                                <td>{$info.cat_name}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </notEmpty>
+            </div>
+        </fieldset>
+    </div>
+    <div style="width: 48%;float: right">
+        <fieldset class="layui-elem-field">
+            <legend>商品基本信息</legend>
+            <div class="layui-field-box">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">优惠券链接</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="click_url" autocomplete="off" placeholder="商品优惠券链接"
+                                   class="layui-input" value="{$item_content['click_url']}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">券结束时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="coupon_end_time" id="date" value="{:date('Y-m-d')}" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品价格</label>
+                        <div class="layui-input-block">
+                            <input type="number" step="0.01" name="price" autocomplete="off" placeholder="商品价格"
+                                   class="layui-input" value="{$info['zk_final_price'] ? $info['zk_final_price'] : $item_content['price']}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">券后价格</label>
+                        <div class="layui-input-block">
+                            <input type="number" step="0.01" name="coupon_price" autocomplete="off" placeholder="券后价格"
+                                   class="layui-input" value="{$item_content['coupon_price']}">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">佣金比率</label>
+                        <div class="layui-input-inline">
+                            <input type="number" step="0.1" name="commission_rate" autocomplete="off" placeholder="佣金比率"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-input-inline" style="color: red;line-height: 38px">
+                            (例:10%,填写10)
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品分类</label>
+                        <div class="layui-input-block">
+                            <select name="cate_id" id="cate_id">
+                                <option value="0">请选择商品分类</option>
+                                <foreach name="cate" item="vo" key="k">
+                                    <option value="{$k}">{$vo}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">商品标题</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入商品标题" class="layui-textarea" name="title">{$item_content['title'] ? $item_content['title'] : $info.title}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">推广文案</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入推广文案" class="layui-textarea" name="intro">{$item_content['intro'] ? $item_content['intro'] : $info.title}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane="">
+                        <label class="layui-form-label">是否精选</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="is_set" lay-skin="switch" lay-filter="switchTest"
+                                   title="是否">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" pane="">
+                        <label class="layui-form-label">是否推送</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="is_send" lay-skin="switch" lay-filter="switchTest"
+                                   title="是否">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text" style="display: none">
+                        <label class="layui-form-label">推送标题</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="请输入推送标题" class="layui-textarea" name="send_title"><notempty name="item_content.coupon_price">券后{$item_content['coupon_price']}元，</notempty>{$item_content['title'] ? $item_content['title'] : $info.title}</textarea>
+                        </div>
+                    </div>
+                    <notEmpty name="info">
+                        <div class="layui-form-item">
+                            <input type="hidden" name="num_iid" value="{$info.num_iid}">
+                            <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                        </div>
+                    </notEmpty>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+    <div style="clear: both"></div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage', 'laydate'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery,
+                    laydate = layui.laydate;
+
+            var date = {
+                min: laydate.now()
+                , istoday: true
+            };
+            document.getElementById('date').onclick = function () {
+                date.elem = this;
+                laydate(date);
+            }
+
+            //查询
+            var error = "{$error}";
+            if (error) {
+                layer.alert(error, {icon: 2});
+            }
+            var success = "{$success}";
+            if (success) {
+                layer.alert(success, {icon: 1});
+            }
+
+            form.on('submit(get-item)', function (data) {
+                var content = $('textarea[name=content]').val();
+                if (!content) {
+                    layer.msg('请输入商品id/链接/第三方软件！');
+                    return false;
+                }
+                window.location.href = "/Item/manualCollection?content=" + encodeURIComponent(content);
+            });
+
+            //监听指定开关
+            form.on('switch(switchTest)', function (data) {
+                var name = this.name;
+                if (name == 'is_send') {
+                    if (this.checked) {
+                        $('textarea[name=send_title]').parents('.layui-form-text').show();
+                    } else {
+                        $('textarea[name=send_title]').parents('.layui-form-text').hide();
+                    }
+                }
+            });
+
+            form.on('submit(submit)', function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/Item/manualCollection";
+                var index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    layer.msg(res.info);
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.href = "/Item/manualCollection";
+                        })
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+</block>

@@ -1,0 +1,31 @@
+<!--底部菜单开始-->
+<div id="menu">
+    <ul>
+        <li <eq name="act" value="one">class="relative active"<else />class="relative"</eq>>
+            <a href="{:U('Index/index',array('user_id'=>$user_id))}" class="link-hover"></a>
+            <div class="menu-inside">
+                <span class="icon_n1"></span>
+                <font>首页</font>
+            </div>
+        </li>
+        <li <eq name="act" value="two">class="relative active"<else />class="relative"</eq>>
+            <a href="{:U('Index/getCateList', array('cate_id'=>'28','user_id'=>$user_id))}" class="link-hover"></a>
+            <div class="menu-inside">
+                <span class="icon_n2"></span>
+                <font>9.9</font>
+            </div>
+        </li>
+        <li <eq name="act" value="three">class="relative active"<else />class="relative"</eq>>
+            <a href="{:U('Index/getCateList', array('cate_id'=>'1000','user_id'=>$user_id))}" class="link-hover"></a>
+            <div class="menu-inside">
+                <span class="icon_n3"></span>
+                <font>热销</font>
+            </div>
+        </li>
+
+    </ul>
+</div>
+<!--底部菜单结束-->
+
+</body>
+</html>

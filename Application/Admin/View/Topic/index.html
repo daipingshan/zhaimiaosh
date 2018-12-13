@@ -1,0 +1,196 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-inline">
+                <a class="layui-btn linksAdd_btn" style="background-color:#5FB878">添加专题</a>
+            </div>
+            <div class="layui-input-inline">
+                <select name="type" class="layui-select type">
+                    <foreach name="type" item="row" key="k">
+                        <option value="{$k}" >{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col width="15%">
+                <col width="30%">
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">ID</th>
+                <th style="text-align:center;">专题类型</th>
+                <th style="text-align:center;">专题名称</th>
+                <th style="text-align:center;">商品总数</th>
+                <th style="text-align:center;">在线数</th>
+                <th style="text-align:center;">添加时间</th>
+                <th style="text-align:center;">排序</th>
+                <th style="text-align:center;">操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery','laypage'], function () {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+
+            var index = 0;
+            getData(1);
+
+            function getData(page) {
+                var count = 0;
+                var data = [];
+                param = {
+                    type: $('.type option:selected').val(),
+                    page: page
+                };
+                $.get('/Topic/index', param, function (res) {
+                    data = res.info.data;
+                    count = res.info.count;
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            //新增专题
+            $("body").on("click", ".linksAdd_btn", function () {
+                var url = "/Topic/topicDisplay";
+                parent.index = layui.layer.open({
+                    title: "添加新专题",
+                    type: 2,
+                    content: url,
+                    success: function (layero, index) {
+                        setTimeout(function () {
+                            layui.layer.tips('点击此处返回专题列表', '.layui-layer-setwin .layui-layer-close', {
+                                tips: 3
+                            });
+                        }, 500)
+                    }
+                });
+                //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                $(window).resize(function () {
+                    layui.layer.full(parent.index);
+                });
+                layui.layer.full(parent.index);
+            });
+
+            //编辑专题
+            $("body").on("click", ".link-edit", function () {
+                var id = $(this).data('id');
+                if (id > 0) {
+                    var url = "/Topic/topicDisplay?id=" + id;
+                    parent.index = layui.layer.open({
+                        title: "编辑专题",
+                        type: 2,
+                        content: url,
+                        success: function (layero, index) {
+                            setTimeout(function () {
+                                layui.layer.tips('点击此处返回专题列表', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            }, 500)
+                        }
+                    })
+                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                    $(window).resize(function () {
+                        layui.layer.full(parent.index);
+                    })
+                    layui.layer.full(parent.index);
+                } else {
+                    layer.msg('该记录编号异常，无法编辑此条专题');
+                }
+            });
+
+            //删除
+            $("body").on("click", ".link-del", function () {
+                var id = $(this).data('id');
+                if (id > 0) {
+                    layer.confirm('确定删除当前专题吗？', {icon: 3, title: '提示信息'}, function (index) {
+                        $.post("/Topic/deleteTopic", {id: id}, function (res) {
+                            if (res.status == 1) {
+                                layer.msg(res.info, function () {
+                                    parent.location.reload();
+                                })
+                            }
+                        });
+                    })
+                } else {
+                    layer.msg('该记录编号异常，无法删除此专题');
+                }
+            });
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData(1);
+            })
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>';
+                        dataHtml += '<td align="center">' + data[i].id + '</td>';
+                        dataHtml += '<td align="center">' + data[i].type + '</td>';
+                        dataHtml += '<td align="center">' + data[i].topic_name + '</td>';
+                        dataHtml += '<td align="center">' + data[i].total_num + '</td>';
+                        dataHtml += '<td align="center" style="color: green">'+data[i].count+'</td>';
+                        dataHtml += '<td align="center">' + data[i].add_time + '</td>';
+                        dataHtml += '<td align="center">' + data[i].sort + '</td>';
+                        dataHtml += '<td align="center"><a class="layui-btn layui-btn-mini link-edit" data-id="' + data[i].id + '"><i class="iconfont icon-edit"></i>编辑专题</a><a class="layui-btn layui-btn-mini layui-btn-danger link-del" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i>删除</a></td>';
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="7" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

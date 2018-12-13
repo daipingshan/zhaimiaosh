@@ -1,0 +1,578 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="title" value="" placeholder="请输入关键字" class="layui-input search_title">
+            </div>
+            <div class="layui-input-inline">
+                <select name="client_platform" class="layui-select search_client_platform">
+                    <option value="">请选择展示客户端</option>
+                    <foreach name="client_platform" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="position" class="layui-select search_position">
+                    <option value="0">请选择广告位置</option>
+                    <foreach name="position" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="jump_type" class="layui-select search_jump_type">
+                    <option value="0">请选择跳转类型</option>
+                    <foreach name="jump_type" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select search_status">
+                    <option value="1">启用状态</option>
+                    <option value="0">禁用状态</option>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+        <div class="layui-inline">
+            <a class="layui-btn linksAdd_btn" style="background-color:#5FB878">添加广告</a>
+        </div>
+        <div class="layui-inline">
+            <a class="layui-btn open-app-url" style="background-color:#3414B8">查看站内地址</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="15%">
+                <col>
+                <col>
+                <col>
+                <col width="15%">
+                <col>
+                <col>
+                <col width="15%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="width:10%;">广告标题</th>
+                <th style="width:10%;">广告图片</th>
+                <th style="width:10%;">展示位置</th>
+                <th style="text-align:center;">跳转类型</th>
+                <th style="text-align:center;">跳转内容</th>
+                <th style="text-align:center;">排序</th>
+                <th style="text-align:center;">状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="box">
+    <div id="box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width:80%;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">广告图片</label>
+                <div class="layui-input-block" style="position: relative">
+                    <input type="text" name="img_url" id="img-input"
+                           class="layui-input" lay-verify="required"
+                           placeholder="请上传广告图片" readonly style="width: 75%">
+                    <div style="position: absolute;left:80% ;top:0;">
+                        <input type="file" name="file" class="layui-upload-file"
+                               lay-ext="jpg|png|gif|jpeg">
+                    </div>
+                    <div style="position: absolute;left:80% ;top:50px;">
+                        <img src="" width="180" height="60" id="img">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">展示客户端平台</label>
+                <div class="layui-input-block">
+                    <foreach name="client_platform" item="row" key="k">
+                        <input type="radio" name="client_platform" value="{$k}" title="{$row}">
+                    </foreach>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">广告位置</label>
+                <div class="layui-input-block">
+                    <foreach name="position" item="row" key="k">
+                        <input type="radio" name="position" value="{$k}" title="{$row}">
+                    </foreach>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">跳转类型</label>
+                <div class="layui-input-block">
+                    <foreach name="jump_type" item="row" key="k">
+                        <input type="radio" name="jump_type" value="{$k}"
+                               title="{$row}">
+                    </foreach>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">广告标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" class="layui-input" lay-verify="required" placeholder="请输入广告标题">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">跳转内容</label>
+                <div class="layui-input-block">
+                    <input type="text" name="content" class="layui-input" placeholder="请输入跳转内容">
+                </div>
+                <div class="layui-form-mid layui-word-aux">已下架商品会自动去除</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">跳转商品所在商城平台</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="item_mall_platform" value="none" title="无">
+                    <input type="radio" name="item_mall_platform" value="taobao" title="淘宝">
+                    <input type="radio" name="item_mall_platform" value="pinduoduo" title="拼多多">
+                    <input type="radio" name="item_mall_platform" value="jingdong" title="京东">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">广告排序</label>
+                <div class="layui-input-block">
+                    <input type="number" name="sort" class="layui-input"
+                           placeholder="请输入广告排序">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0" id="advert_id"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="save-advert">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="reset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="box-app-url" style="display:none;margin: 20px">
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">
+                        <span>时尚范儿</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Item/fashion" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Item/fashion">复制URL
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">品牌专场</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Item/good" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Item/good">复制URL
+                    </button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">
+                        <span>高额券</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Item/highCoupon" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Item/fashion">复制URL
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">9块9</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Item/nineNine" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Item/nineNine">复制URL
+                    </button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">
+                        <span>个人中心</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="zhaimiaosh://User/index" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://User/index">复制URL
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">我的团队</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" value="zhaimiaosh://User/teamDetail" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://User/teamDetail">
+                        复制URL
+                    </button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">
+                        <span>推广收益</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Balance/index" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Balance/index">复制URL
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">分享app</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" value="zhaimiaosh://User/sharePoster" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://User/sharePoster">
+                        复制URL
+                    </button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">
+                        <span>宅喵说</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Timeline/index" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Timeline/index">
+                        复制URL
+                    </button>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">限时疯抢</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Item/special" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Item/special">复制URL
+                    </button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">
+                        <span>小编精选</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="zhaimiaosh://Item/handpick" readonly>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-primary" type="button" data-clipboard-text="zhaimiaosh://Item/handpick">复制URL
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</block>
+<block name="js">
+    <script src="__JS__/clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage', 'upload'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery
+                    , upload = layui.upload;
+            var index = 0;
+            upload({
+                url: '/Common/uploadImg'
+                , before: function () {
+                    index = layer.msg('上传中，请稍候', {icon: 16, time: false, shade: 0.8});
+                }
+                , success: function (res) {
+                    layer.close(index);
+                    layer.msg(res.message);
+                    if (res.state == 'SUCCESS') {
+                        $('#img-input').val(res.url);
+                        $('#img').attr('src', res.url);
+                    }
+                }
+            });
+            getData(1);
+            function getData(page) {
+                var count = 0;
+                var data = newArray = [];
+                param = {
+                    title: $('.search_title').val(),
+                    client_platform: $('.search_client_platform option:selected').val(),
+                    position: $('.search_position option:selected').val(),
+                    jump_type: $('.search_jump_type option:selected').val(),
+                    status: $('.search_status option:selected').val(),
+                    page: page
+                };
+                $.get('/Advert/index', param, function (res) {
+                    if (param.title != '') {
+                        data = res.info.data;
+                        count = res.info.count;
+                        for (var i = 0; i < data.length; i++) {
+                            var linksStr = data[i];
+
+                            function changeStr(data) {
+                                var dataStr = '';
+                                var showNum = data.split(eval("/" + param.title + "/ig")).length - 1;
+                                if (showNum > 1) {
+                                    for (var j = 0; j < showNum; j++) {
+                                        dataStr += data.split(eval("/" + param.title + "/ig"))[j] + "<i style='color:#03c339;font-weight:bold;'>" + param.title + "</i>";
+                                    }
+                                    dataStr += data.split(eval("/" + param.title + "/ig"))[showNum];
+                                    return dataStr;
+                                } else {
+                                    dataStr = data.split(eval("/" + param.title + "/ig"))[0] + "<i style='color:#03c339;font-weight:bold;'>" + param.title + "</i>" + data.split(eval("/" + param.title + "/ig"))[1];
+                                    return dataStr;
+                                }
+                            }
+
+                            if (linksStr.title.indexOf(param.title) > -1) {
+                                linksStr["title"] = changeStr(linksStr.title);
+                            }
+                            newArray.push(linksStr);
+                        }
+                        data = newArray;
+                    } else {
+                        data = res.info.data;
+                        count = res.info.count;
+                    }
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            var btns = document.querySelectorAll('button');
+            var clipboard = new Clipboard(btns);
+            clipboard.on('success', function (e) {
+                layer.msg('复制成功');
+            });
+
+            clipboard.on('error', function (e) {
+                layer.msg('复制失败！');
+            });
+
+            //添加广告
+            $(".linksAdd_btn").click(function () {
+                $('#box #advert_id').val(0);
+                $('#reset').click();
+                $('#box input[name=client_platform]').removeAttr('checked');
+                $('#box input[name=position]').removeAttr('checked');
+                $('#box input[name=jump_type]').removeAttr('checked');
+                $('#box input[name=item_mall_platform]').removeAttr('checked');
+                $('#img').attr('src', '');
+                form.render();
+                layui.layer.open({
+                    title: "添加广告",
+                    type: 1,
+                    area: ['1000px', '560px'],
+                    content: $('#box'),
+                })
+            })
+
+            //添加广告
+            $(".open-app-url").click(function () {
+                layui.layer.open({
+                    title: "站内地址",
+                    type: 1,
+                    area: ['80%', '80%'],
+                    content: $('#box-app-url'),
+                })
+            })
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData(1);
+            })
+
+            //操作
+            $("body").on("click", ".links_edit", function () {  //编辑
+                $('#reset').click();
+                $('#img').attr('src', '');
+                var _this = $(this);
+                $('#box #img-input').val(_this.data('img_url'));
+                $('#box #img').attr('src', _this.data('img_url'));
+                $('#box input[name=client_platform]').each(function () {
+                    if (_this.data('client_platform') == $(this).val()) {
+                        $(this).attr('checked', true).siblings().removeAttr("checked");
+                    }
+                });
+                $('#box input[name=position]').each(function () {
+                    if (_this.data('position') == $(this).val()) {
+                        $(this).attr('checked', true).siblings().removeAttr("checked");
+                    }
+                });
+                $('#box input[name=jump_type]').each(function () {
+                    if (_this.data('jump_type') == $(this).val()) {
+                        $(this).attr('checked', true).siblings().removeAttr("checked");
+                    }
+                });
+                $('#box input[name=item_mall_platform]').each(function () {
+                    if (_this.data('item_mall_platform') == $(this).val()) {
+                        $(this).attr('checked', true).siblings().removeAttr("checked");
+                    }
+                });
+                $('#box input[name=title]').val(_this.data('title'));
+                $('#box input[name=content]').val(_this.data('content'));
+                $('#box input[name=sort]').val(_this.data('sort'));
+                $('#box #advert_id').val(_this.data('id'));
+                form.render();
+                layui.layer.open({
+                    title: "编辑广告",
+                    type: 1,
+                    area: ['1000px', '500px'],
+                    content: $('#box'),
+                })
+            })
+
+            //登录按钮事件
+            form.on("submit(save-advert)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/Advert/add"
+                if (data.field.id > 0) {
+                    url = "/Advert/update";
+                }
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            $("body").on("click", ".ad_status", function () { //更新广告状态
+                var _this = $(this);
+                layer.confirm('确定要更新当前广告状态吗？', {icon: 3, title: '提示信息'}, function () {
+                    index = layer.msg('更新中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/Advert/setStatus", {id: _this.data('id')}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                })
+            });
+
+            $("body").on("click", ".ad_delete", function () { //删除广告
+                var _this = $(this);
+                layer.confirm('确定要删除当前广告吗？', {icon: 3, title: '提示信息'}, function () {
+                    index = layer.msg('正在删除，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/Advert/delete", {id: _this.data('id')}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                })
+            });
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td align="center">' + data[i].title + '</td>'
+                                + '<td align="center"><img src="' + data[i].img_url + '" width="120" height="40"></td>'
+                                + '<td align="center">' + data[i].client_platform_name + '<br/>'
+                                + data[i].position_name + '</td>'
+                                + '<td align="center">' + data[i].jump_type_name + '<br/>'
+                                + data[i].item_mall_platform + '</td>'
+                                + '<td align="center">' + data[i].content + '</td>'
+                                + '<td align="center">' + data[i].sort + '</td>';
+                        if (data[i].status == 1) {
+                            dataHtml += '<td style="color:#5FB878;text-align: center">启用</td>'
+                                    + '<td>'
+                                    + '<a class="layui-btn layui-btn-mini links_edit" data-id="' + data[i].id + '" data-title="' + data[i].title + '" data-img_url="' + data[i].img_url + '" data-client_platform="' + data[i].client_platform + '" data-position="' + data[i].position + '" data-jump_type="' + data[i].jump_type + '" data-content="' + data[i].content + '" data-item_mall_platform="' + data[i].item_mall_platform + '" data-sort="' + data[i].sort + '" ><i class="iconfont icon-edit"></i> 编辑</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini ad_status" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i> 禁用</a>'
+                                    + '</td>';
+                        } else {
+                            dataHtml += '<td style="color:#f00;text-align: center">禁用</td>'
+                                    + '<td>'
+                                    + '<a class="layui-btn layui-btn-mini links_edit" data-id="' + data[i].id + '" data-title="' + data[i].title + '" data-img_url="' + data[i].img_url + '" data-client_platform="' + data[i].client_platform + '" data-position="' + data[i].position + '" data-jump_type="' + data[i].jump_type + '" data-content="' + data[i].content + '" data-item_mall_platform="' + data[i].item_mall_platform + '" data-sort="' + data[i].sort + '" ><i class="iconfont icon-edit"></i> 编辑</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini ad_status" data-id="' + data[i].id + '"><i class="layui-icon">&#x1005;</i> 启用</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini ad_delete" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i> 删除</a>'
+                                    + '</td>';
+                        }
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="9" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

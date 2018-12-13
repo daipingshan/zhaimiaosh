@@ -1,0 +1,591 @@
+<extend name="Common/common"/>
+<block name="css">
+    <style>
+        .layui-input-inline {
+            margin-top: 5px;
+        }
+    </style>
+</block>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="mobile" value="" placeholder="请输入手机号码" class="layui-input search_mobile">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="invite_code" value="" placeholder="请输入邀请码"
+                       class="layui-input search_invite_code">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="invite_a_num" value="" placeholder="邀请人数大于等于"
+                       class="layui-input search_invite_a_num">
+            </div>
+            <div class="layui-input-inline">
+                <select name="level" class="layui-select search_level">
+                    <option value="">请选择用户身份</option>
+                    <foreach name="level_arr" item="row" key="k">
+                        <option value="{$k}">{$row}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="is_auth" title="等待审核" class="search_is_auth">
+            </div>
+            <div class="layui-input-inline">
+                <select name="sort_field" class="layui-select search_sort">
+                    <option value="">请选择排序方式</option>
+                    <option value="u.invite_a_num">邀请人从高到低</option>
+                    <option value="u.account_balance">账户余额从高到低</option>
+                    <option value="u.level_upgrade_time">升级时间倒序</option>
+                    <option value="u.level">用户等级倒序</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="partner_id" class="layui-select search_partner_id">
+                    <option value="">请选择合作伙伴</option>
+                    <foreach name="partners" item="partner" key="k">
+                        <option value="{$partner.id}">{$partner.partner_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="LAY_demorange_s" placeholder="开始日">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="LAY_demorange_e" placeholder="结束日">
+            </div>
+            <a class="layui-btn search_btn" data-type="select">查询</a>
+            <a class="layui-btn layui-btn-danger search_btn" data-type="down">导出</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="10%">
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col width="12%">
+                <col>
+                <col width="20%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">手机号码</th>
+                <th style="text-align:center;">邀请码</th>
+                <th style="text-align:center;">用户昵称</th>
+                <th style="text-align:center;">用户身份</th>
+                <th style="text-align:center;">
+                    邀请人数
+                </th>
+                <th style="text-align:center;">
+                    账户余额
+                <th style="text-align:center;">提现信息</th>
+                <th style="text-align:center;">时间</th>
+                <th style="text-align:center;">备注</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="box">
+    <div id="auth-box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width: 90%;margin: auto">
+            <div class="layui-form-item">
+                <label class="layui-form-label">邀请人PID</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" id="invite_pid" lay-verify="required" placeholder="邀请人PID"
+                           disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户PID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pid" id="pid" class="layui-input"
+                           placeholder="请输入用户pid">
+                </div>
+            </div>
+            <div class="layui-form-item" style="padding-left: 110px">
+                <div class="layui-form-mid layui-word-aux">
+                    该用户所属合作伙伴联盟为<span id="partner_name">未知</span>
+                </div>
+                <div class="layui-form-mid layui-word-aux">请在淘宝联盟下为该用户生成PID;如（mm_12345678_87654321_00000000）</div>
+                <div class="layui-form-mid layui-word-aux">
+                    请保持PID的导购ID与邀请人的导购一致，即（mm_12345678_87654321_00000000）中的（87654321）
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0" id="auth_user_id"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="save-pid">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="password-box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width: 90%;margin: auto">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="password" id="password" class="layui-input" lay-verify="required"
+                           placeholder="请输入用户密码">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0" id="password_user_id"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="save-password">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="remark-box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width: 90%;margin: auto">
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea type="text" name="remark" id="remark" class="layui-textarea"
+                              lay-verify="required"
+                              placeholder="请输入备注信息"> </textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0" id="remark_user_id"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="save-remark">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="move-box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width: 90%;margin: auto">
+            <div class="layui-form-item">
+                <label class="layui-form-label">迁移团队</label>
+                <div class="layui-input-block">
+                    <select name="partner_id" class="layui-select search_partner_id">
+                        <option value="">请选择迁移团队</option>
+                        <foreach name="partners" item="partner" key="k">
+                            <option value="{$partner.id}">{$partner.partner_name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item" id="withdraw-box">
+                <label class="layui-form-label">是否提现</label>
+                <div class="layui-input-inline" style="width: 20%">
+                    <input type="text" disabled id="money" value="" class="layui-input"/>
+                </div>
+                <div class="layui-input-inline">
+                    <input type="checkbox" name="is_withdraw" id="is_withdraw" title="提现" style="position: relative">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="move-user">立即迁移</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="reset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage', 'laydate'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    laydate = layui.laydate,
+                    $ = layui.jquery;
+            var start = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas //将结束日的初始值设定为开始日
+                }
+            };
+
+            var end = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                }
+            };
+            document.getElementById('LAY_demorange_s').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            }
+            document.getElementById('LAY_demorange_e').onclick = function () {
+                end.elem = this
+                laydate(end);
+            }
+            var index = 0, box_index = 0;
+            var invite_num = "{:C('COMMISSION_RATE.group_leader_num')}";
+            getData(1, 'select');
+            function getData(page, search_type) {
+                var count = 0;
+                var data = [], auth = [];
+                param = {
+                    mobile: $('.search_mobile').val(),
+                    invite_code: $('.search_invite_code').val(),
+                    invite_a_num: $('.search_invite_a_num').val(),
+                    level: $('.search_level option:selected').val(),
+                    sort_field: $('.search_sort option:selected').val(),
+                    partner_id: $('.search_partner_id option:selected').val(),
+                    start_time: $('#LAY_demorange_s').val(),
+                    end_time: $('#LAY_demorange_e').val(),
+                    search_type: search_type,
+                    page: page
+                }
+                ;
+                if ($('.search_is_auth:checked').val()) {
+                    param.is_auth = 1;
+                }
+                if (search_type == 'down') {
+                    var tmp = [];
+                    for (var key in param) {
+                        if (param[key]) {
+                            tmp.push(key + '=' + param[key]);
+                        }
+                    }
+                    var url_param = tmp.join('&');
+                    if (url_param) {
+                        url_param.substr(1);
+                    }
+                    var location_url = "/User/index?" + url_param;
+                    location.href = location_url;
+                } else {
+                    $.get('/User/index', param, function (res) {
+                        data = res.info.data;
+                        count = res.info.count;
+                        auth = res.info.auth;
+                        $(".links_content").html(renderDate(data, auth));
+                        if (index) {
+                            layer.close(index);
+                        }
+                        if (page == 1) {
+                            pages(count);
+                        }
+                    })
+                }
+            }
+
+            var parseParam = function (param, key) {
+                var paramStr = "";
+                paramStr += "&" + key + "=" + encodeURIComponent(param);
+                return paramStr.substr(1);
+            };
+
+            //查询
+            $(".search_btn").click(function () {
+                if ($(this).data('type') == 'select') {
+                    index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                }
+                getData(1, $(this).data('type'));
+            })
+
+            //操作
+            $("body").on("click", ".set-pid", function () {
+                $('#invite_pid').val($(this).data('invite-pid'));
+                $('#pid').val('');
+                $('#auth_user_id').val($(this).data('id'));
+                $('#partner_name').text($(this).data('partner_name'));
+                layui.layer.open({
+                    title: "授权PID",
+                    type: 1,
+                    area: ['800px', '350px'],
+                    content: $('#auth-box'),
+                })
+            })
+
+            //操作
+            $("body").on("click", ".set-password", function () {
+                $('#password').val('');
+                $('#password_user_id').val($(this).data('id'));
+                layui.layer.open({
+                    title: "修改密码",
+                    type: 1,
+                    area: ['500px', '200px'],
+                    content: $('#password-box'),
+                })
+            })
+
+            $("body").on("click", ".open-user-info", function () {
+                var user_id = $(this).data('id');
+                if (user_id > 0) {
+                    var url = "/User/userInfo?user_id=" + user_id;
+                    var index = layui.layer.open({
+                        title: "查看用户信息",
+                        type: 2,
+                        content: url,
+                        success: function (layero, index) {
+                            setTimeout(function () {
+                                layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            }, 500)
+                        }
+                    })
+                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                    $(window).resize(function () {
+                        layui.layer.full(index);
+                    })
+                    layui.layer.full(index);
+                } else {
+                    layer.msg('用户编号异常，无法查看用户信息');
+                }
+
+            })
+
+            $("body").on("click", ".open-down-line", function () {
+                var user_id = $(this).data('id');
+                if (user_id > 0) {
+                    var url = "/User/openDownLine?user_id=" + user_id;
+                    var index = layui.layer.open({
+                        title: "查看下线",
+                        type: 2,
+                        content: url,
+                        success: function (layero, index) {
+                            setTimeout(function () {
+                                layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            }, 500)
+                        }
+                    })
+                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                    $(window).resize(function () {
+                        layui.layer.full(index);
+                    })
+                    layui.layer.full(index);
+                } else {
+                    layer.msg('用户编号异常，无法查看用户下线');
+                }
+
+            })
+
+            //修改备注
+            $("body").on("click", ".update-remark", function () {
+                $('#remark').val('');
+                $('#remark_user_id').val($(this).data('id'));
+                layui.layer.open({
+                    title: "更新备注",
+                    type: 1,
+                    area: ['500px', '225px'],
+                    content: $('#remark-box'),
+                })
+            });
+
+            //操作
+            $("body").on("click", ".move-user", function () {
+                $('#reset').click();
+                if ($(this).data('money') > 0) {
+                    $('#move-box #withdraw-box').show();
+                    $('#move-box #money').val($(this).data('money'));
+                } else {
+                    $('#move-box #withdraw-box').hide();
+                }
+                $('#move-box input[name=id]').val($(this).data('id'));
+                box_index = layui.layer.open({
+                    title: "迁移账号",
+                    type: 1,
+                    area: ['500px', '300px'],
+                    content: $('#move-box'),
+                })
+            })
+
+            form.on("submit(save-remark)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/User/updateRemark";
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            form.on("submit(move-user)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/User/moveUser";
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            form.on("submit(save-pid)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/User/setPid";
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            form.on("submit(save-password)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/User/updatePassword";
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            $("body").on("click", ".set-status", function () { //更改用户状态
+                var _this = $(this);
+                layer.confirm('确定要更新当前用户状态吗？', {icon: 3, title: '提示信息'}, function () {
+                    index = layer.msg('更新中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/User/setStatus", {id: _this.data('id')}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                })
+            });
+
+            $("body").on("click", ".set-level", function () { //升级用户为团长
+                var _this = $(this);
+                layer.confirm('确定要将此用户升级为团长吗？', {icon: 3, title: '提示信息'}, function () {
+                    index = layer.msg('更新中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/User/setLevel", {id: _this.data('id')}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                })
+            });
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr, 'select');
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data, auth) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td align="center">' + data[i].mobile + '(' + data[i].partner_name + ')' + '</td>'
+                                + '<td align="center">' + data[i].invite_code + '</td>'
+                                + '<td align="center">' + data[i].nickname + '</td>'
+                                + '<td align="center">' + data[i].level_name + '</td>'
+                                + '<td align="center">' + data[i].invite_a_num + '&nbsp;&nbsp;|&nbsp;&nbsp;' + data[i].invite_b_num + '</td>'
+                                + '<td align="center">¥' + data[i].account_balance + '</td>';
+                        if (data[i].bank_account) {
+                            dataHtml += '<td style="color:#5FB878;text-align: center">真实姓名：' + data[i].bank_account_real_name + '<br>提现账号：' + data[i].bank_account + '</td>'
+                        } else {
+                            dataHtml += '<td style="color:#f00;text-align: center">尚未绑定提现账号</td>'
+                        }
+                        dataHtml += '<td align="center">' + data[i].time + '</td>';
+                        dataHtml += '<td align="center">' + data[i].remark
+                                + '<a class="layui-btn layui-btn-mini update-remark" data-id="' + data[i].id + '"><i class="iconfont icon-edit"></i> 更新备注</a></td>';
+                        dataHtml += '<td><a class="layui-btn layui-btn-normal layui-btn-mini open-user-info" data-id="' + data[i].id + '" data-partner_name="' + data[i].partner_name + '"><i class="layui-icon">&#xe60a;</i> 查看详情</a>';
+                        if (auth.is_pass == 1) {
+                            dataHtml += '<a class="layui-btn layui-btn-mini set-password" data-id="' + data[i].id + '"><i class="iconfont icon-edit"></i> 修改密码</a>';
+                        }
+                        if (auth.is_status == 1) {
+                            if (data[i].status == 1) {
+                                dataHtml += '<a class="layui-btn layui-btn-danger layui-btn-mini set-status" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i> 禁用</a>';
+                            } else {
+                                dataHtml += '<a class="layui-btn layui-btn-danger layui-btn-mini set-status" data-id="' + data[i].id + '"><i class="layui-icon">&#x1005;</i> 启用</a>';
+                            }
+                        }
+                        if (auth.is_level == 1 && data[i].level > 0 && data[i].level < 5) {
+                            dataHtml += '<a class="layui-btn layui-btn-success layui-btn-mini set-level" data-id="' + data[i].id + '"><i class="layui-icon">&#xe604;</i> 升级团长</a>';
+                        }
+                        if (!data[i].pid && data[i].invite_a_num > 0 && auth.is_pid == 1) {
+                            dataHtml += '<a class="layui-btn layui-btn-warning layui-btn-mini set-pid" data-id="' + data[i].id + '" data-invite-pid="' + data[i].inviter_pid + '" data-partner_name="' + data[i].partner_name + '"><i class="layui-icon">&#xe631;</i> 授权PID</a>';
+                        }
+                        if (data[i].level > 0) {
+                            dataHtml += '<a class="layui-btn layui-btn-warning layui-btn-mini open-down-line" data-id="' + data[i].id + '"><i class="layui-icon">&#xe631;</i> 查看下线</a>';
+                        }
+                        if (auth.is_move == 1 && data[i].level > 0) {
+                            dataHtml += '<a class="layui-btn layui-btn-success layui-btn-mini move-user" data-id="' + data[i].id + '" data-money="' + data[i].account_balance + '"><i class="layui-icon">&#xe604;</i> 一键迁移</a>';
+                        }
+                        dataHtml += '</td></tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="10" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

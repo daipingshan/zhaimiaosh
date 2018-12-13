@@ -1,0 +1,258 @@
+<extend name="Common/common"/>
+<block name="body">
+    <notEmpty name="error_info">
+        <fieldset class="layui-elem-field">
+            <legend>异常提示</legend>
+            <div class="layui-field-box">
+                {$error_info}
+            </div>
+        </fieldset>
+        <else/>
+        <fieldset class="layui-elem-field">
+            <legend>用户基本信息</legend>
+            <div class="layui-field-box">
+                <div class="layui-form links_list">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col>
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <td>手机号码</td>
+                            <td>{$info['mobile']}</td>
+                            <td>用户昵称</td>
+                            <td>{$info['nickname']}</td>
+                        </tr>
+                        <tr>
+                            <td>用户身份</td>
+                            <td>{$info['level_name']}</td>
+                            <td>邀请码</td>
+                            <td>{$info['invite_code']}</td>
+                        </tr>
+                        <tr>
+                            <td>联盟PID</td>
+                            <td>{$info['pid']}</td>
+                            <td>邀请人</td>
+                            <td>{$info['i_mobile']} ({$info['i_invite_code']})</td>
+                        </tr>
+                        <tr>
+                            <td>邀请下级人数</td>
+                            <td>{$info['invite_a_num']}</td>
+                            <td>邀请下下级人数</td>
+                            <td>{$info['invite_b_num']}</td>
+                        </tr>
+                        <tr>
+                            <td>真实姓名</td>
+                            <td>{$info['bank_account_real_name']}</td>
+                            <td>提现账号</td>
+                            <td>{$info['bank_account']}</td>
+                        </tr>
+                        <tr>
+                            <td>账户余额</td>
+                            <td>¥{$info['account_balance']}元</td>
+                            <td>注册时间</td>
+                            <td>{$info['add_time']|date="Y-m-d H:i:s",###}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>用户交易流水</legend>
+            <div class="layui-field-box">
+                <blockquote class="layui-elem-quote news_search">
+                    <div class="layui-inline layui-form">
+                        <div class="layui-input-inline">
+                            <input type="text" name="order_sn" value="" placeholder="请输入交易编号"
+                                   class="layui-input search_order_sn">
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="source" class="layui-select search_source">
+                                <option value="">请选择交易来源</option>
+                                <foreach name="source_arr" item="row" key="k">
+                                    <option value="{$k}">{$row}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="direction" class="layui-select search_direction">
+                                <option value="">请选择资金流向</option>
+                                <foreach name="direction_arr" item="row" key="k">
+                                    <option value="{$k}">{$row}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="start_time" id="date-picker-start" value="" placeholder="开始时间"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end_time" id="date-picker-end" value="" placeholder="结束时间"
+                                   class="layui-input">
+                        </div>
+                        <a class="layui-btn search_btn">查询</a>
+                    </div>
+                </blockquote>
+                <blockquote class="layui-elem-quote case-flow-detail"></blockquote>
+                <div class="layui-form links_list">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="20%">
+                            <col>
+                            <col>
+                            <col>
+                            <col>
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th style="text-align:center;">交易编号</th>
+                            <th style="text-align:center;">交易来源</th>
+                            <th style="text-align:center;">资金流向</th>
+                            <th style="text-align:center;">交易金额</th>
+                            <th style="text-align:center;">交易时间</th>
+                            <th style="text-align:center;">账户余额</th>
+                        </tr>
+                        </thead>
+                        <tbody class="links_content">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="page">
+                </div>
+            </div>
+        </fieldset>
+
+    </notEmpty>
+
+</block>
+<block name="js">
+    <script>
+        var user_id = parseInt("{$info['id']}");
+        if (user_id > 0) {
+            layui.config({
+                base: JS_PATH
+            }).use(['form', 'layer', 'jquery', 'laypage', 'laydate'], function () {
+                var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery,
+                    laydate = layui.laydate;
+                var start = {
+                    max: laydate.now()
+                    , istoday: true
+                    , choose: function (datas) {
+                        end.min = datas; //开始日选好后，重置结束日的最小日期
+                        end.start = datas //将结束日的初始值设定为开始日
+                    }
+                };
+
+                var end = {
+                    max: laydate.now()
+                    , istoday: true
+                    , choose: function (datas) {
+                        start.max = datas; //结束日选好后，重置开始日的最大日期
+                    }
+                };
+                document.getElementById('date-picker-start').onclick = function () {
+                    start.elem = this;
+                    laydate(start);
+                };
+                document.getElementById('date-picker-end').onclick = function () {
+                    end.elem = this;
+                    laydate(end);
+                };
+                $('#date-picker-start').val(laydate.now(-6));
+                $('#date-picker-end').val(laydate.now(0));
+                var index = 0;
+                getData(1);
+
+                function getData(page) {
+                    var count = 0;
+                    var income_money = expend_money = 0;
+                    var data = [];
+                    param = {
+                        user_id: user_id,
+                        order_sn: $('.search_order_sn').val(),
+                        source: $('.search_source option:selected').val(),
+                        direction: $('.search_direction option:selected').val(),
+                        start_date : $('#date-picker-start').val(),
+                        end_date : $('#date-picker-end').val(),
+                        page: page
+                    };
+                    $.get('/User/cashFlow', param, function (res) {
+                        data = res.info.data;
+                        count = res.info.count;
+                        income_money = res.info.income_money;
+                        expend_money = res.info.expend_money;
+
+                        var tip_html = "收入："+income_money+"元，支出："+expend_money+" 元";
+                        $('.case-flow-detail').empty().append(tip_html);
+
+                        $(".links_content").html(renderDate(data));
+                        if (index) {
+                            layer.close(index);
+                        }
+                        if (page == 1) {
+                            pages(count);
+                        }
+                    })
+                }
+
+                //查询
+                $(".search_btn").click(function () {
+                    index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    getData(1);
+                })
+
+                /**
+                 * @param count
+                 * @param is_get
+                 */
+                function pages(count) {
+                    laypage({
+                        cont: "page",
+                        count: count,
+                        pages: Math.ceil(count / LIMIT_NUM),
+                        jump: function (obj, first) {
+                            if (first) {
+                                form.render();
+                            } else {
+                                index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                                getData(obj.curr);
+                            }
+
+                        }
+                    })
+                }
+
+                function renderDate(data) {
+                    var dataHtml = '';
+                    if (data.length != 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            dataHtml += '<tr>'
+                                + '<td align="center">' + data[i].order_sn + '</td>'
+                                + '<td align="center">' + data[i].source_name + '</td>';
+                            if (data[i].direction == 'add') {
+                                dataHtml += '<td align="center" style="color:#5FB878 ">' + data[i].direction_name + '</td>';
+                            } else {
+                                dataHtml += '<td align="center" style="color: #FF5722">' + data[i].direction_name + '</td>';
+                            }
+                            dataHtml += '<td align="center">¥' + data[i].money + '元</td>'
+                                + '<td align="center">' + data[i].add_time + '</td>'
+                                + '<td align="center">¥' + data[i].account_balance + '元</td>'
+                                + '</tr>';
+                        }
+                    } else {
+                        dataHtml = '<tr><td colspan="6" align="center">暂无数据</td></tr>';
+                    }
+                    return dataHtml;
+                }
+            })
+        }
+    </script>
+</block>

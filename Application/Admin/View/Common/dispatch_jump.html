@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>404--layui后台管理模板</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="__LAY__/css/layui.css" media="all"/>
+</head>
+<body class="childrenBody">
+<div style="text-align: center; padding:11% 0;">
+    <if condition="isset($error)">
+        <i class="layui-icon" style="line-height:20rem; font-size:20rem; color: #f00;">&#x1006;</i>
+        <p style="font-size: 20px; font-weight: 300; color: #f00;">{$error}</p>
+        <else/>
+        <i class="layui-icon" style="line-height:20rem; font-size:20rem; color: #5FB878;">&#xe605;</i>
+        <p style="font-size: 20px; font-weight: 300; color: #5FB878;">{$message}</p>
+    </if>
+    <b id="wait" style="display: none">{$waitSecond}</b>
+</div>
+<script type="text/javascript">
+    (function () {
+        var wait = "{$waitSecond}", href = "{$jumpUrl}";
+        var interval = setInterval(function () {
+            var time = --wait;
+            if (time <= 0) {
+                parent.location.href = href;
+                clearInterval(interval);
+            }
+        }, 1000);
+    })();
+</script>
+</body>
+</html>

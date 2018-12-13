@@ -1,0 +1,47 @@
+html{font-family:"微软雅黑","Helvetica Neue",Helvetica,STHeiTi,Arial,sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;font-size:62.5%}
+body{margin:0;font-size:1.4rem;line-height:20px;color:#000;height:100%;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+a{background:transparent;text-decoration:none;color:#000}
+a:active{outline:0}
+b,strong{font-weight:bold}
+dfn{font-style:normal}
+img{border:0;vertical-align:middle}
+*{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-tap-highlight-color:transparent;outline:0}
+input,textarea,button{border:0;margin:0;padding:0;font-family:"微软雅黑","Helvetica Neue",Helvetica,STHeiTi,Arial,sans-serif}
+textarea{resize:none}
+table{border-collapse:collapse;border-spacing:0}
+td,th{padding:0}
+h1,h2,h3,h4,h5,h6,p,figure,form,blockquote{margin:0}
+ul,ol,li,dl,dd{margin:0;padding:0}
+ul,ol{list-style:none}
+input::-moz-placeholder,textarea::-moz-placeholder{color:#ccc}
+input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#ccc}
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:#ccc}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.clearfix{display:inline-block}
+* html .clearfix{height:1%}
+.clearfix{display:block}
+body{background:#f1efef}
+.live-user{position:fixed;padding:10px 3%;width:94%;top:0;z-index:2}
+.live-user .user-imgs{height:60px;width:calc(100% - 110px);overflow:hidden;float:left}
+.live-user .user-imgs .imgs-item{float:left;margin:0 3px}
+.live-user .user-imgs .imgs-item .item-name{width:40px;margin:4px 0;font-size:10px;white-space:nowrap;overflow:hidden;background:#fdf9f9;line-height:12px;border-radius:5px;text-align:center}
+.live-user .user-imgs .imgs-item .item-head{height:40px;width:40px;border-radius:50%;background:no-repeat center;background-size:100%}
+.user-total{overflow:hidden;width:100px;height:30px;margin:5px auto;line-height:30px;background:#fff;border-radius:15px;text-align:center;box-shadow:0 1px 1px rgba(0,0,0,0.1)}
+#wrapper{margin-top:60px;position:absolute;z-index:1;top:0;bottom:0;left:0;width:100%;overflow:hidden}
+#scroller{width:100%;position:absolute;z-index:1;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-transform:translateZ(0);-moz-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0);-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;-o-text-size-adjust:none;text-size-adjust:none}
+#scroller .pullDown{margin-top:-20px;height:20px;line-height:20px;text-align:center}
+#scroller .live-content{padding:10px 3%;width:94%}
+.contents-item{margin:5px 0}
+.content-item .item-time,.content-item .item-goodsimg,.content-item .goodstext-text{margin:10px 0}
+.content-item .item-time{text-align:center}
+.content-item .item-time .time-style{margin:auto;padding:1px 7px;background-color:#e0e0e0;font-size:12px;border-radius:5px;letter-spacing:1px}
+.content-item .item-user-image{width:50px;height:50px;background:no-repeat center;background-size:100%;float:left}
+.item-goodsimg .goodsimg-img{overflow:hidden;padding-left:15px}
+.item-goodsimg .goodsimg-img img{height:150px}
+.content-item .goodstext-text{background:#fff;border-radius:3px;padding:10px;overflow:hidden}
+.content-item .goodstext-text .text-desc{margin-bottom:10px}
+.content-item .goodstext-text .text-btn a{padding:5px 10px;border-radius:3px;background:red;color:#fff;display:inline-block}
+.content-item .goodstext-text .btn-number{color:#30c279;padding-left:20px;font-size:14px}
+.goodstext-triangle{width:0;height:0;border-top:10px solid transparent;border-right:15px solid #fff;border-bottom:10px solid transparent;float:left;margin-top:15px}
+.live_more{display:block;position:fixed;right:5px;bottom:40px;width:80px;height:60px;color:#fff;background:url("http://pic.taodianke.com/static/Touch/images/live.png") no-repeat center;background-size:100%;text-align:center;line-height:60px;z-index:2}

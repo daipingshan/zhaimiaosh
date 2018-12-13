@@ -1,0 +1,85 @@
+p{
+        margin: 10px 0;
+    }
+    .title{
+        font-size: 23px;
+        margin: 10px auto;
+    }
+    .wrapper{
+        height: 370px;
+        background-color: rgb(252, 238, 237);
+    }
+    .header{
+        width:1000px;
+        margin:0 auto;
+        height: auto;
+        min-height: 33px;
+        background-image: url(&quot;http://cdnq1.mikecrm.com/images/formTemplate/header_bg_yanZhi.png&quot;);
+        background-color: rgb(157, 41, 51);
+        background-position: 50% 100%;
+        background-repeat: repeat-x;
+    }
+    .h_headline{
+        text-align:center;font-size:24px;color:#FFFFFF;
+    }
+    .fb_componentWrapper {
+        padding-bottom: 40px;
+        width:1000px;
+        margin:0 auto;
+        height: auto;
+    }
+    .fb_component {
+        float: left;
+        width: 100%;
+        padding: 12px 100px 12px 260px;
+        box-sizing: border-box;
+    }
+    .fbc_title{
+        line-height: 1.4;
+        font-size: 16px;
+        font-weight: normal;
+        color: #000000;
+        margin-top: 4px;
+    }
+    .body{
+        width: 100%;
+
+    }
+    .fb_componentText{
+        float: left;
+        margin: 0;
+        padding: 0;
+        word-break: break-word;
+        word-wrap: break-word;
+    }
+    .fbc_required{
+        margin-left: 5px;
+        color: #DA2824;
+    }
+    .fbi_input{
+        line-height: 2;
+        width: 80%;
+    }
+    .aria{
+        width: 10%;
+        float: left;
+        height: auto;
+        line-height: auto;
+    }
+    .leixing{
+        float: left;
+        margin-left: 95px;
+        width: 100%;
+    }
+    .btn{
+        border: 1px;
+        width: auto;
+        height: 30px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-weight: normal;
+        color: #ffffff;
+        background: red;
+    }

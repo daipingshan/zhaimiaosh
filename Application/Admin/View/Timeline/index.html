@@ -1,0 +1,249 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-inline">
+                <a class="layui-btn linksAdd_btn" style="background-color:#5FB878">添加说说</a>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="num_iid" value="" placeholder="请输入商品编号"
+                       class="layui-input search_num_iid">
+            </div>
+            <div class="layui-input-inline">
+                <select name="author_name" class="layui-select author_name">
+                    <option value="">请选择小编</option>
+                    <foreach name="author_list" item="row" key="k">
+                        <option value="{$row.author_name}">{$row.author_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select timeline-status">
+                    <option value="-1">全部</option>
+                    <option value="0">已隐藏</option>
+                    <option value="1">已显示</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="date" id="date-picker" value="" placeholder="{$date}"
+                       class="layui-input">
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col width="15%">
+                <col width="25%">
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">ID</th>
+                <th style="text-align:center;">小编</th>
+                <th style="text-align:center;">商品编号</th>
+                <th style="text-align:center;">内容简介</th>
+                <th style="text-align:center;">券后价</th>
+                <th style="text-align:center;">状态</th>
+                <th style="text-align:center;">时间</th>
+                <th style="text-align:center;">操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laydate', 'laypage'], function () {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery,
+                laydate = layui.laydate;
+
+            var date_picker = {
+                max: laydate.now()
+                , istoday: true
+            };
+            document.getElementById('date-picker').onclick = function () {
+                date_picker.elem = this;
+                laydate(date_picker);
+            };
+
+            var index = 0;
+            getData(1);
+
+            function getData(page) {
+                var count = 0;
+                var data = [];
+                param = {
+                    num_iid: $('.search_num_iid').val(),
+                    date: $('#date-picker').val(),
+                    author_name: $('.author_name option:selected').val(),
+                    status: $('.timeline-status option:selected').val(),
+                    page: page
+                };
+                $.get('/Timeline/index', param, function (res) {
+                    data = res.info.data;
+                    count = res.info.count;
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            //发布新说说
+            $("body").on("click", ".linksAdd_btn", function () {
+                var url = "/Timeline/timelineDisplay";
+                 parent.index = layui.layer.open({
+                    title: "发布新说说",
+                    type: 2,
+                    content: url,
+                    success: function (layero, index) {
+                        setTimeout(function () {
+                            layui.layer.tips('点击此处返回宅喵说列表', '.layui-layer-setwin .layui-layer-close', {
+                                tips: 3
+                            });
+                        }, 500)
+                    }
+                });
+                //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                $(window).resize(function () {
+                    layui.layer.full(parent.index);
+                });
+                layui.layer.full(parent.index);
+            });
+
+            //编辑
+            $("body").on("click", ".link-edit", function () {
+                var id = $(this).data('id');
+                if (id > 0) {
+                    var url = "/Timeline/timelineDisplay?id=" + id;
+                    parent.index = layui.layer.open({
+                        title: "编辑说说",
+                        type: 2,
+                        content: url,
+                        success: function (layero, index) {
+                            setTimeout(function () {
+                                layui.layer.tips('点击此处返回宅喵说列表', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            }, 500)
+                        }
+                    })
+                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                    $(window).resize(function () {
+                        layui.layer.full(parent.index);
+                    })
+                    layui.layer.full(parent.index);
+                } else {
+                    layer.msg('该记录编号异常，无法编辑此条说说');
+                }
+            });
+
+            //删除
+            $("body").on("click", ".link-del", function () {
+                var id = $(this).data('id');
+                if (id > 0) {
+                    layer.confirm('删除说说后无法恢复，是否确定？', {icon: 3, title: '提示信息'}, function (index) {
+                        $.post("/Timeline/delTimeline", {id: id}, function (res) {
+                            if (res.status == 1) {
+                                layer.msg(res.info, function () {
+                                    parent.location.reload();
+                                })
+                            }
+                        });
+                    })
+                } else {
+                    layer.msg('该记录编号异常，无法删除此条说说');
+                }
+            });
+            //切换状态
+            $("body").on("click", ".switch-status", function () {
+                var id = $(this).data('id');
+                if (id > 0) {
+                    $.post("/Timeline/switchStatus", {id: id}, function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.info, function () {
+                                parent.location.reload();
+                            })
+                        }
+                    });
+                } else {
+                    layer.msg('该记录编号异常，无法切换状态');
+                }
+            });
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData(1);
+            })
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>';
+                        dataHtml += '<td align="center">' + data[i].id + '</td>';
+                        dataHtml += '<td align="center">' + data[i].author_name + '</td>';
+                        dataHtml += '<td align="center">' + data[i].num_iid + '</td>';
+                        dataHtml += '<td align="center">' + data[i].content + '</td>';
+                        dataHtml += '<td align="center">¥' + data[i].coupon_price + '</td>';
+                        if (data[i].status==1){
+                            dataHtml += '<td align="center"><font style="color:#009688">已显示</font></td>';
+                        }else{
+                            dataHtml += '<td align="center"><font style="color:#FF5722">已隐藏</font></td>';
+                        }
+                        dataHtml += '<td align="center">发送时间：' + data[i].add_time + '<br/><br/>添加时间：'+data[i].create_time+'</td>';
+                        dataHtml += '<td>';
+                        dataHtml += '<a class="layui-btn layui-btn-mini link-edit" data-id="' + data[i].id + '"><i class="iconfont icon-edit"></i>编辑说说</a>';
+                        dataHtml+='<br><a class="layui-btn layui-btn-mini layui-btn-normal switch-status" data-id="' + data[i].id + '"><i class="layui-icon">&#xe631;</i>切换状态</a>';
+                        dataHtml+='<br><a class="layui-btn layui-btn-mini layui-btn-danger link-del" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i>删除记录</a>';
+                        dataHtml += '</td>';
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="8" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

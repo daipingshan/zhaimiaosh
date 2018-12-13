@@ -1,0 +1,144 @@
+<extend name="Common/common"/>
+<block name="css">
+    <link rel="stylesheet" href="__CSS__/main.css" media="all"/>
+</block>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select" id="change-partner">
+                    <foreach name="partners" item="partner" key="k">
+                        <option value="{$partner.id}">{$partner.partner_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select" id="change-platform">
+                    <foreach name="mall_platform" item="platform" key="k">
+                        <option value="{$k}">{$platform}</option>
+                    </foreach>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="row" style="padding: 0 10px">
+        <blockquote class="layui-elem-quote title">最近六十天提现数据折线图</blockquote>
+        <div id="data-chart" style="height: 400px;width: 100%;"></div>
+    </div>
+</block>
+<block name="js">
+    <script src="https://cdn.bootcss.com/echarts/4.0.4/echarts.min.js"></script>
+    <script>
+        var dateList = [];
+        var numList = [];
+        layui.config({
+            base: JS_PATH
+        }).use(['jquery'], function () {
+            var $ = layui.jquery;
+            var index = 0;
+            getData();
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData();
+            });
+
+            function getData() {
+                var partner_id = $('#change-partner').val();
+                var mall_platform = $('#change-platform').val();
+                $.get('/BISystem/withdraw', {partner_id: partner_id,mall_platform:mall_platform}, function (res) {
+                    if (res.status == 1) {
+                        dateList = res.info.dateList;
+                        dataList = res.info.dataList;
+
+                        drawCharts(dateList, dataList);
+                    } else {
+                        layer.msg(res.info);
+                    }
+                });
+                if (index) {
+                    layer.close(index);
+                }
+            }
+        });
+
+        function drawCharts(dateList, dataList) {
+            var myChart = echarts.init(document.getElementById('data-chart'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['提现数据']
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    dataZoom: [
+                        {
+                            type: 'slider',
+                            xAxisIndex: 0,
+                            filterMode: 'empty',
+                            start: 50,
+                            end: 100
+                        },
+                        // {
+                        //     type: 'inside',
+                        //     realtime: true,
+                        //     start:70,
+                        //     end:100
+                        // }
+                    ],
+                    grid: {
+                        left: "30px",
+                        right: "30px",
+                        bottom: '50px',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: dateList
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series:
+                        [
+                            {
+                                name: '提现金额',
+                                type: 'line',
+                                stack: '总量',
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'top'
+                                    }
+                                },
+                                areaStyle: {normal: {}},
+                                data: dataList
+                            }
+                        ]
+                }
+            ;
+
+            myChart.setOption(option);
+        }
+    </script>
+</block>

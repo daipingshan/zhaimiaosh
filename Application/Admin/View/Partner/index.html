@@ -1,0 +1,282 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <input type="text" value="" placeholder="请输入关键字" class="layui-input search_input">
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+        <div class="layui-inline">
+            <a class="layui-btn partnerAdd_btn" style="background-color:#5FB878">添加合作伙伴</a>
+        </div>
+    </blockquote>
+    <div class="layui-form partner_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="15%">
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col width="13%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th style="text-align:left;">登录账号</th>
+                <th>合作伙伴名称</th>
+                <th>时间</th>
+                <th>登录信息</th>
+                <th>备注</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody class="partner_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="box">
+    <div id="partner-box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width:80%;" name="save-partner">
+            <div class="layui-form-item">
+                <label class="layui-form-label">登录手机号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="mobile" class="layui-input" lay-verify="required" placeholder="请输入登录手机号">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">登录密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="password" class="layui-input"
+                           placeholder="请输入登录密码">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">合作伙伴名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="partner_name" class="layui-input" lay-verify="required" placeholder="请输入合作伙伴名称">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">合作伙伴PID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pid" class="layui-input" lay-verify="required" placeholder="请输入合作伙伴PID">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0" id="partner_id"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="save-partner">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="reset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</block>
+<block name="js">
+    <script type="text/javascript">
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery;
+            var index = 0;
+
+            getData(1);
+            function getData(page) {
+                var keyword = $(".search_input").val();
+                var count = 0;
+                var newArray = data = [];
+                $.get('/Partner/index', {keyword: keyword, page: page}, function (res) {
+                    if (keyword != '') {
+                        data = res.info.data;
+                        count = res.info.count;
+                        for (var i = 0; i < data.length; i++) {
+                            var partnerStr = data[i];
+
+                            function changeStr(data) {
+                                var dataStr = '';
+                                var showNum = data.split(eval("/" + keyword + "/ig")).length - 1;
+                                if (showNum > 1) {
+                                    for (var j = 0; j < showNum; j++) {
+                                        dataStr += data.split(eval("/" + keyword + "/ig"))[j] + "<i style='color:#03c339;font-weight:bold;'>" + keyword + "</i>";
+                                    }
+                                    dataStr += data.split(eval("/" + keyword + "/ig"))[showNum];
+                                    return dataStr;
+                                } else {
+                                    dataStr = data.split(eval("/" + keyword + "/ig"))[0] + "<i style='color:#03c339;font-weight:bold;'>" + keyword + "</i>" + data.split(eval("/" + keyword + "/ig"))[1];
+                                    return dataStr;
+                                }
+                            }
+
+                            if (partnerStr.mobile.indexOf(keyword) > -1) {
+                                partnerStr["mobile"] = changeStr(partnerStr.mobile);
+                            }
+                            if (partnerStr.partner_name.indexOf(keyword) > -1) {
+                                partnerStr["partner_name"] = changeStr(partnerStr.partner_name);
+                            }
+                            newArray.push(partnerStr);
+                        }
+                        data = newArray;
+                    } else {
+                        data = res.info.data;
+                        count = res.info.count;
+                    }
+                    $(".partner_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData(1);
+            })
+
+            //添加合作伙伴
+            $(".partnerAdd_btn").click(function () {
+                $('#reset').click();
+                $('#partner-box #partner_id').val(0);
+                layui.layer.open({
+                    title: "添加合作伙伴",
+                    type: 1,
+                    area: ['620px', '450px'],
+                    content: $('#partner-box'),
+                })
+            })
+
+            //编辑合作伙伴信息
+            $("body").on("click", ".partner_edit", function () {
+                $('#reset').click();
+                var _this = $(this);
+                $('#partner-box input[name=mobile]').val(_this.data('mobile'));
+                $('#partner-box input[name=partner_name]').val(_this.data('partner_name'));
+                $('#partner-box input[name=pid]').val(_this.data('pid'));
+                $('#partner-box input[name=remark]').val(_this.data('remark'));
+                $('#partner-box #partner_id').val(_this.data('id'));
+                layui.layer.open({
+                    title: "编辑合作伙伴",
+                    type: 1,
+                    area: ['620px', '450px'],
+                    content: $('#partner-box'),
+                })
+            })
+
+            //提交
+            form.on("submit(save-partner)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/Partner/add"
+                if (data.field.id > 0) {
+                    url = "/Partner/edit";
+                }
+                var wait_index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(wait_index);
+                    }
+                });
+                return false;
+            });
+
+            $("body").on("click", ".partner_status_update", function () {  //删除
+                var _this = $(this);
+                layer.confirm('确定要更新当前伙伴状态吗？', {icon: 3, title: '提示信息'}, function () {
+                    var wait_index = layer.msg('更新中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/Partner/setStatus", {id: _this.data('id')}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(wait_index);
+                        }
+                    });
+                })
+            });
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td>' + data[i].id + '</td>'
+                                + '<td>' + data[i].mobile + '</td>'
+                                + '<td>' + data[i].partner_name + '</td>'
+                                + '<td>创建:' + data[i].add_time
+                                + '<br />Token:' + data[i].update_taobao_token_time
+                                + '<br />Cookie:' + data[i].update_cookie_time
+                                + '</td>'
+                                + '<td>' + data[i].last_ip + '<br />' + data[i].last_time + '</td>'
+                                + '<td>' + data[i].remark + '</td>';
+                        if (data[i].status == 1) {
+                            dataHtml += '<td style="color:#5FB878">合作中</td>'
+                                    + '<td>'
+                                    + '<a class="layui-btn layui-btn-mini partner_edit" data-id="' + data[i].id + '" data-mobile="' + data[i].mobile + '" data-partner_name="' + data[i].partner_name + '" data-pid="' + data[i].pid + '" data-remark="' + data[i].remark + '"><i class="iconfont icon-edit"></i> 编辑</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini partner_status_update" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i> 停止合作</a>'
+                                    + '</td>';
+                        } else {
+                            dataHtml += '<td style="color:#f00">不再合作</td>'
+                                    + '<td>'
+                                    + '<a class="layui-btn layui-btn-mini partner_edit" data-id="' + data[i].id + '" data-mobile="' + data[i].mobile + '" data-partner_name="' + data[i].partner_name + '" data-pid="' + data[i].pid + '" data-remark="' + data[i].remark + '"><i class="iconfont icon-edit"></i> 编辑</a>'
+                                    + '<a class="layui-btn layui-btn-danger layui-btn-mini partner_status_update" data-id="' + data[i].id + '"><i class="layui-icon">&#x1005;</i> 继续合作</a>'
+                                    + '</td>';
+                        }
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="7" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

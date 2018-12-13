@@ -1,0 +1,136 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-inline">
+                <label class="layui-form-label">范围选择</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="开始日" id="LAY_demorange_s">
+                </div>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="截止日" id="LAY_demorange_e">
+                </div>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">排行编号</th>
+                <th style="text-align:center;">手机号码</th>
+                <th style="text-align:center;">用户昵称</th>
+                <th style="text-align:center;">提现信息</th>
+                <th style="text-align:center;">邀请人数</th>
+                <th style="text-align:center;">注册时间</th>
+                <th style="text-align:center;">账户余额</th>
+                <th style="text-align:center;">收益金额</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laydate'], function () {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                $ = layui.jquery,
+                laydate = layui.laydate;
+
+            var index = 0;
+
+            var start = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    end.min = datas; //开始日选好后，重置结束日的最小日期
+                    end.start = datas //将结束日的初始值设定为开始日
+                }
+            };
+
+            var end = {
+                max: laydate.now()
+                , istoday: true
+                , choose: function (datas) {
+                    start.max = datas; //结束日选好后，重置开始日的最大日期
+                }
+            };
+            document.getElementById('LAY_demorange_s').onclick = function () {
+                start.elem = this;
+                laydate(start);
+            }
+            document.getElementById('LAY_demorange_e').onclick = function () {
+                end.elem = this
+                laydate(end);
+            }
+            $('#LAY_demorange_s').val(laydate.now(-7));
+            $('#LAY_demorange_e').val(laydate.now(0));
+            getData();
+            function getData() {
+                var start_time = $('#LAY_demorange_s').val();
+                var end_time = $('#LAY_demorange_e').val();
+                $.get('/BISystem/userExpense', {start_time: start_time, end_time: end_time}, function (res) {
+                    if (res.status == 1) {
+                        var data = res.info.data;
+                        $(".links_content").html(renderDate(data));
+                    } else {
+                        layer.msg(res.info);
+                    }
+                });
+                if (index) {
+                    layer.close(index);
+                }
+            }
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData();
+            })
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var tmp_num = i + 1;
+                        dataHtml += '<tr>'
+                            + '<td align="center" style="color: #FF5722"><button class="layui-btn layui-btn-danger" style="width: 20px;height: 20px;border-radius: 50%;padding: 0;line-height: 20px">' + tmp_num + '</button></td>'
+                            + '<td align="center">' + data[i].mobile + '</td>'
+                            + '<td align="center">' + data[i].nickname + '</td>';
+                        if (data[i].bank_account) {
+                            dataHtml += '<td style="color:#5FB878;text-align: center">真实姓名：' + data[i].bank_account_real_name + '<br>提现账号：' + data[i].bank_account + '</td>'
+                        } else {
+                            dataHtml += '<td style="color:#f00;text-align: center">尚未绑定提现账号</td>'
+                        }
+                        dataHtml += '<td align="center">' + data[i].invite_a_num + ' | ' + data[i].invite_b_num + '</td>'
+                            + '<td align="center">' + data[i].add_time + '</td>'
+                            + '<td align="center">¥' + data[i].account_balance + '</td>'
+                            + '<td align="center" style="color: #5FB878">¥' + data[i].money + '</td>'
+                            + '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="7" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+        ;
+    </script>
+</block>

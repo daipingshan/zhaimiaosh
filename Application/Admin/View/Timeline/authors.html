@@ -1,0 +1,219 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline">
+            <a class="layui-btn linksAdd_btn" style="background-color:#5FB878">添加小编</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="15%">
+                <col>
+                <col>
+                <col>
+                <col width="13%">
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">ID</th>
+                <th style="text-align:center;">小编名称</th>
+                <th style="text-align:center;">头像</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="box">
+    <div id="box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width:80%;" name="save-atec☺">
+            <div class="layui-form-item">
+                <label class="layui-form-label">小编头像</label>
+                <div class="layui-input-block" style="position: relative">
+                    <input type="text" name="author_avatar" id="img-input"
+                           class="layui-input" lay-verify="required"
+                           placeholder="请上传小编头像" readonly style="width: 75%">
+                    <div style="position: absolute;left:80% ;top:0;">
+                        <input type="file" name="file" class="layui-upload-file"
+                               lay-ext="jpg|png|gif|jpeg">
+                    </div>
+                    <div style="position: absolute;left:80% ;top:50px;">
+                        <img src="" width="100" height="100" id="author_avatar">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">小编昵称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="author_name" class="layui-input" lay-verify="required" placeholder="请输入小编昵称"
+                           style="width:75%">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" value="0" id="author_id"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="save-author">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage', 'upload'], function () {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery
+                , upload = layui.upload;
+            var index = 0;
+            upload({
+                url: '/Common/uploadImg'
+                , before: function () {
+                    index = layer.msg('上传中，请稍候', {icon: 16, time: false, shade: 0.8});
+                }
+                , success: function (res) {
+                    layer.close(index);
+                    layer.msg(res.message);
+                    if (res.state == 'SUCCESS') {
+                        $('#img-input').val(res.url);
+                        $('#author_avatar').attr('src', res.url);
+                    }
+                }
+            });
+            getData(1);
+
+            function getData(page) {
+                var count = 0;
+                var data = [];
+                $.get('/Timeline/authors', {page: page}, function (res) {
+                    layer.close(index);
+                    data = res.info.data;
+                    count = res.info.count;
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            $("body").on("click", ".linksAdd_btn", function () {  //新增
+                var _this = $(this);
+                $('#box input[name=author_name]').val('');
+                $('#box input[name=author_avatar]').val('');
+                $('#box #author_avatar').attr('src', '');
+                layui.layer.open({
+                    title: "新增小编",
+                    type: 1,
+                    area: ['1000px', '300px'],
+                    content: $('#box'),
+                })
+            })
+
+            $("body").on("click", ".links_edit", function () {  //编辑
+                var _this = $(this);
+                $('#box input[name=author_name]').val(_this.data('author_name'));
+                $('#box input[name=author_avatar]').val(_this.data('author_avatar'));
+                $('#box #author_avatar').attr('src', _this.data('author_avatar'));
+                $('#box #author_id').val(_this.data('id'));
+                layui.layer.open({
+                    title: "编辑小编",
+                    type: 1,
+                    area: ['1000px', '300px'],
+                    content: $('#box'),
+                })
+            })
+
+            //编辑
+            form.on("submit(save-author)", function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/Timeline/updateAuthor";
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    layer.msg(res.info);
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            $("body").on("click", ".links_del", function () {  //删除
+                var _this = $(this);
+                layer.confirm('确定删除当前小编吗？', {icon: 3, title: '提示信息'}, function (index) {
+                    index = layer.msg('更新中，请稍候', {icon: 16, time: false, shade: 0.8});
+                    $.post("/Timeline/updateAuthor", {id: _this.data('id'),is_del:1}, function (res) {
+                        layer.msg(res.info);
+                        if (res.status == 1) {
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 1000);
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                })
+            });
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                            + '<td align="center">' + data[i].id + '</td>'
+                            + '<td align="center">' + data[i].author_name + '</td>'
+                            + '<td align="center"><img src="' + data[i].author_avatar + '" width="30" height="30"></td>';
+                        dataHtml += '<td>' +
+                            '<a class="layui-btn layui-btn-mini links_edit" data-id="' + data[i].id + '" data-author_name="' + data[i].author_name + '" data-author_avatar="' + data[i].author_avatar + '" ><i class="iconfont icon-edit"></i> 编辑</a>'
+                            + '<a class="layui-btn layui-btn-danger layui-btn-mini links_del" data-id="' + data[i].id + '"><i class="layui-icon">&#x1007;</i> 删除</a></td>';
+
+                        dataHtml += '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="5" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

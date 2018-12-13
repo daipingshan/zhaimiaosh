@@ -1,0 +1,234 @@
+<extend name="Common/common"/>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form" style="width: 100%;">
+            <div class="layui-input-inline" style="width:20%;">
+                <input type="text" name="title" class="layui-input search_title" lay-verify="required"
+                       placeholder="请输入商品标题或商品编号">
+            </div>
+            <div class="layui-input-inline">
+                <select name="cate_id" class="layui-select search_cate_id">
+                    <option value="">请选择商品分类</option>
+                    <foreach name="cate_arr" item="cate" key="k">
+                        <option value="{$k}">{$cate}</option>
+                    </foreach>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="layui-form links_list">
+        <table class="layui-table">
+            <colgroup>
+                <col width="10%">
+                <col>
+                <col>
+                <col width="40%">
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">商品图片</th>
+                <th style="text-align:center;">商品分类</th>
+                <th style="text-align:center;">商品编号</th>
+                <th style="text-align:center;">商品标题</th>
+                <th style="text-align:center;">商品价格</th>
+                <th style="text-align:center;">月销量</th>
+                <th style="text-align:center;">操作</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+    <div id="page">
+    </div>
+</block>
+<block name="box">
+    <div id="box" style="display:none;margin-top: 20px">
+        <form class="layui-form" style="width: 90%">
+            <div class="layui-form-item">
+                <label class="layui-form-label">推送标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="push_title" class="layui-input" lay-verify="required" placeholder="请输入推送标题"
+                           value="宅喵生活为您推荐">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">推送内容</label>
+                <div class="layui-input-block">
+                    <textarea name="title" class="layui-textarea" lay-verify="required" placeholder="请输入商品标题">
+                    </textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">推送类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="send_type" value="1" lay-filter="send-type" title="别名推送" checked>
+                    <input type="radio" name="send_type" value="2" lay-filter="send-type" title="标签推送">
+                    <input type="radio" name="send_type" value="3" lay-filter="send-type" title="全部推送">
+                </div>
+            </div>
+            <div class="layui-form-item" id="user-mobile">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="mobile" class="layui-input"
+                               placeholder="请输入用户手机号码">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" id="user-level" style="display:none">
+                <label class="layui-form-label">推送标签</label>
+                <div class="layui-input-block">
+                    <select name="level" class="layui-select search_position">
+                        <option value="">请选择用户身份</option>
+                        <option value="0">消费者</option>
+                        <option value="1">V1推广员</option>
+                        <option value="2">V2推广员</option>
+                        <option value="3">V3推广员</option>
+                        <option value="4">V4推广员</option>
+                        <option value="5">团长</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="num_iid" value=""/>
+                    <input type="hidden" name="type" value="jingdong"/>
+                    <button class="layui-btn" lay-submit="" lay-filter="send-user">立即推送</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+            var form = layui.form(),
+                    layer = parent.layer === undefined ? layui.layer : parent.layer,
+                    laypage = layui.laypage,
+                    $ = layui.jquery;
+            var index = 0;
+            getData(1);
+            function getData(page) {
+                var count = 0;
+                var data = [];
+                param = {
+                    keyword: $('.search_title').val(),
+                    cate_id: $('.search_cate_id option:selected').val(),
+                    num_iid: $('.search_num_iid').val(),
+                    range_id: $('.search_range_type option:selected').val(),
+                    range_from: $('.search_range_from').val(),
+                    range_to: $('.search_range_to').val(),
+                    page: page
+                };
+                if (param.range_id != 9 && param.range_id != '') {
+                    if (param.range_from == '' && param.range_to !== '') {
+                        layer.msg('开始，结束区间至少要填写一个');
+                        return false;
+                    }
+                }
+                if ($('.search_is_status:checked').val()) {
+                    param.status = 1;
+                }
+                $.get('/Item/jdItemList', param, function (res) {
+                    data = res.info.data;
+                    count = res.info.count;
+                    $(".links_content").html(renderDate(data));
+                    if (index) {
+                        layer.close(index);
+                    }
+                    if (page == 1) {
+                        pages(count);
+                    }
+                })
+            }
+
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData(1);
+            })
+
+            $("body").on("click", ".send-user", function () {  //编辑
+                var _this = $(this);
+                $('#box input[name=push_title]').val('宅喵生活为您推荐');
+                $('#box textarea').val(_this.data('title'));
+                $('#box input[name=num_iid]').val(_this.data('id'));
+                form.render();
+                layui.layer.open({
+                    title: "推送商品",
+                    type: 1,
+                    area: ['600px', '450px'],
+                    content: $('#box'),
+                })
+            })
+
+            form.on('submit(send-user)', function (data) {
+                var _btn = data.elem;
+                _btn.disabled = true;
+                var url = "/Item/sendItem";
+                index = layer.msg('请求中，请稍候', {icon: 16, time: false, shade: 0.8});
+                $.post(url, data.field, function (res) {
+                    layer.msg(res.info);
+                    if (res.status == 1) {
+                        layer.msg(res.info, function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        _btn.disabled = false;
+                        layer.msg(res.info);
+                        layer.close(index);
+                    }
+                });
+                return false;
+            });
+
+            /**
+             * @param count
+             * @param is_get
+             */
+            function pages(count) {
+                laypage({
+                    cont: "page",
+                    count: count,
+                    pages: Math.ceil(count / LIMIT_NUM),
+                    jump: function (obj, first) {
+                        if (first) {
+                            form.render();
+                        } else {
+                            index = layer.msg('加载中，请稍候', {icon: 16, time: false, shade: 0.8});
+                            getData(obj.curr);
+                        }
+
+                    }
+                })
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        dataHtml += '<tr>'
+                                + '<td align="center"><img src="' + data[i].pic_url + '" width="80" height="80"></td>'
+                                + '<td align="center">' + data[i].cate_name + '</td>'
+                                + '<td align="center">' + data[i].num_iid + '</td>'
+                                + '<td align="left"><a style="color:#1E9FFF;" href="https://item.jd.com/' + data[i].num_iid + '.html" target="_blank" >' + data[i].title + '</a></td>'
+                                + '<td align="center">券后价：¥' + data[i].coupon_price + '<br>优惠券面额：¥' + data[i].coupon_money + '<br>推广员佣金：' + data[i].commission + '</td>'
+                                + '<td align="center">' + data[i].sale_num + '</td>'
+                                + '<td><a class="layui-btn layui-btn-mini send-user" data-title="' + data[i].title + '" data-id="' + data[i].num_iid + '"><i class="iconfont icon-edit"></i>立即推送</a></td>'
+                                + '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="7" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        })
+    </script>
+</block>

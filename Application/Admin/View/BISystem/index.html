@@ -1,0 +1,296 @@
+<extend name="Common/common"/>
+<block name="css">
+    <link rel="stylesheet" href="__CSS__/main.css" media="all"/>
+</block>
+<block name="body">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline layui-form">
+            <div class="layui-input-inline">
+                <select name="status" class="layui-select" id="change-partner">
+                    <foreach name="partners" item="partner" key="k">
+                        <option value="{$partner.id}">{$partner.partner_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <a class="layui-btn search_btn">查询</a>
+        </div>
+    </blockquote>
+    <div class="panel_box row">
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#e2a28e;">
+                    <i class="iconfont" data-icon="&#xe609;">&#xe609;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="one-add" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">V1/V2新增人数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#e2a28e;">
+                    <i class="iconfont" data-icon="&#xe609;">&#xe609;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="tt-add" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">V3新增人数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#e2a28e;">
+                    <i class="iconfont" data-icon="&#xe609;">&#xe609;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="four-add" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">V4新增人数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#e2a28e;">
+                    <i class="iconfont" data-icon="&#xe609;">&#xe609;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="five-add" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">团长新增</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#FF5722;">
+                    <i class="iconfont icon-dongtaifensishu" data-icon="icon-dongtaifensishu"></i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="tnu-qty" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">新增用户</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color: #e85462;">
+                    <i class="layui-icon" data-icon="&#xe62a;">&#xe62a;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="total-order-num" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">新用户订单数 / 总订单数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon">
+                    <i class="layui-icon" data-icon="&#xe62d;">&#xe62d;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="tnu-op" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">新用户下单占比</cite>
+                </div>
+            </a>
+        </div>
+
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#009688;">
+                    <i class="layui-icon" data-icon="&#xe613;">&#xe613;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span class="paid-user-num" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">下单用户数</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color: #e88454;">
+                    <i class="layui-icon" data-icon="&#xe63a;">&#xe63a;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="order-pay-total" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">总支付金额</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#5FB878;">
+                    <i class="layui-icon" data-icon="&#xe64a;">&#xe64a;</i>
+                </div>
+                <div class="panel_word imgAll">
+                    <span class="total-commisson" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">总佣金：支付/结算</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#F7B824;">
+                    <i class="iconfont icon-wenben" data-icon="icon-wenben"></i>
+                </div>
+                <div class="panel_word waitNews">
+                    <span class="user-commission" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">用户分成: 支付/结算</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#2F4056;">
+                    <i class="iconfont icon-text" data-icon="icon-text"></i>
+                </div>
+                <div class="panel_word">
+                    <span class="company-profit" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">利润：支付/结算</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color: #5474e8">
+                    <i class="layui-icon" data-icon="&#xe628;">&#xe628;</i>
+                </div>
+                <div class="panel_word newMessage">
+                    <span class="user_average" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">客单价/客单量</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#a9c1b3">
+                    <i class="layui-icon" data-icon="&#xe62e;">&#xe62e;</i>
+                </div>
+                <div class="panel_word imgAll">
+                    <span class="order_average" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">笔单价</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#bdab6a">
+                    <i class="iconfont" data-icon="&#xe636;">&#xe636;</i>
+                </div>
+                <div class="panel_word waitNews">
+                    <span class="average_profit" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">客单利润/笔单利润</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel col max_panel" style="width: 25%;">
+            <a href="javascript:void(0)">
+                <div class="panel_icon" style="background-color:#a9abc1">
+                    <i class="iconfont" data-icon="&#xe64d;">&#xe64d;</i>
+                </div>
+                <div class="panel_word">
+                    <span class="commission_rate" style="font-size: 15px;"></span>
+                    <cite style="font-size: 15px;">佣金率</cite>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row" style="padding: 0 10px">
+        <blockquote class="layui-elem-quote title">团长当日拉新排行榜<i class="iconfont icon-new1"></i></blockquote>
+        <table class="layui-table">
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th style="text-align:center;">排名</th>
+                <th style="text-align:center;">手机号码</th>
+                <th style="text-align:center;">昵称</th>
+                <th style="text-align:center;">所属合作伙伴</th>
+                <th style="text-align:center;">拉新人数</th>
+            </tr>
+            </thead>
+            <tbody class="links_content">
+            </tbody>
+        </table>
+    </div>
+</block>
+<block name="js">
+    <script>
+        layui.config({
+            base: JS_PATH
+        }).use(['jquery'], function () {
+            var $ = layui.jquery;
+
+            var index = 0;
+            //查询
+            $(".search_btn").click(function () {
+                index = layer.msg('查询中，请稍候', {icon: 16, time: false, shade: 0.8});
+                getData();
+            });
+
+            getData();
+
+            function getData() {
+                var partner_id = $('#change-partner').val();
+
+                $.get('/BISystem/index', {partner_id: partner_id}, function (res) {
+                    if (res.status == 1)
+                    {
+                        console.log(res.info);
+                        var data = res.info.data;
+                        var rankList = res.info.rankList;
+
+                        $(".one-add").html((data.update_level_1 ? data.update_level_1 : '0')+" / " +(data.update_level_2 ? data.update_level_2 : '0'));
+                        $(".tt-add").html(data.update_level_3 ? data.update_level_3 : '0');
+                        $(".four-add").html(data.update_level_4 ? data.update_level_4 : '0');
+                        $(".five-add").html(data.update_level_5 ? data.update_level_5 : '0');
+                        $(".tnu-qty").html( (data.new_user_qty ? data.new_user_qty : '0'));
+                        $(".total-order-num").html((data.new_user_order_qty ? data.new_user_order_qty : '0')+" / " +(data.order_qty ? data.order_qty : '0'));
+                        $(".tnu-op").html(data.order_qty && data.new_user_order_qty ? ((data.new_user_order_qty / data.order_qty) * 100).toFixed(2) + "%" : '0%');
+                        $(".paid-user-num").html(data.order_paid_user_num ? data.order_paid_user_num : '0');
+                        $(".order-pay-total").html(data.order_pay_total ? (parseFloat(data.order_pay_total)).toFixed(2) : '0');
+                        $(".total-commisson").html((data.order_commission_paid ? (parseFloat(data.order_commission_paid)).toFixed(2) : '0') + " / " + (data.order_commission_settle ? (parseFloat(data.order_commission_settle)).toFixed(2) : '0'));
+                        $(".user-commission").html((data.user_commission_paid ? (parseFloat(data.user_commission_paid )).toFixed(2): '0') + " / " + (data.user_commission_settle ? (parseFloat(data.user_commission_settle)).toFixed(2) : '0'));
+                        $(".company-profit").html((data.profit_paid ? (parseFloat(data.profit_paid)).toFixed(2) : '0') + " / " + (data.profit_settle ? (parseFloat(data.profit_settle)).toFixed(2) : '0'));
+                        $(".user_average").html( (data.order_paid_user_num ? parseFloat(data.order_pay_total/data.order_paid_user_num).toFixed(2): 0)+'/'+ (data.order_paid_user_num?parseFloat(data.order_qty/data.order_paid_user_num).toFixed(2):0));
+                        $(".order_average").html(data.order_qty ? parseFloat(data.order_pay_total/data.order_qty).toFixed(2): 0);
+                        $(".average_profit").html((data.order_paid_user_num ? parseFloat(data.profit_paid/data.order_paid_user_num).toFixed(2): 0)+'/'+ (data.order_qty?parseFloat(data.profit_paid/data.order_qty).toFixed(2):0));
+                        $(".commission_rate").html(data.order_pay_total ? parseFloat(data.order_commission_paid/data.order_pay_total*100).toFixed(2)+'%': 0);
+
+                        //排行
+                        $(".links_content").html(renderDate(rankList));
+                    } else {
+                        layer.msg(res.info);
+                    }
+                });
+                if (index) {
+                    layer.close(index);
+                }
+            }
+
+            function renderDate(data) {
+                var dataHtml = '';
+                if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var tmp_num = i + 1;
+                        dataHtml += '<tr>'
+                            + '<td align="center" style="color: #FF5722"><button class="layui-btn layui-btn-danger" style="width: 20px;height: 20px;border-radius: 50%;padding: 0;line-height: 20px">' + tmp_num + '</button></td>'
+                            + '<td align="center">' + data[i].mobile + '</td>'
+                            + '<td align="center">' + data[i].nickname + '</td>';
+
+                        dataHtml += '<td style="color:#f00;text-align: center">'+data[i].partner_name+'</td>'
+                        dataHtml += '<td align="center" style="color: #5FB878">' + data[i].num + '</td>'
+                            + '</tr>';
+                    }
+                } else {
+                    dataHtml = '<tr><td colspan="7" align="center">暂无数据</td></tr>';
+                }
+                return dataHtml;
+            }
+        });
+    </script>
+</block>

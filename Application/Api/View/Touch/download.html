@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html style="font-size: 50px;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <title>宅喵生活下载页</title>
+    <script type="text/javascript">
+        (function () {
+            function o() {
+                document.documentElement.style.fontSize = (document.documentElement.clientWidth > 640 ? 640 : document.documentElement.clientWidth) / 20 + "px"
+            }
+
+            var e = null;
+            window.addEventListener("resize", function () {
+                clearTimeout(e), e = setTimeout(o, 300)
+            }, !1), o()
+        })(window);
+    </script>
+    <style>
+        /*样式重置start*/
+        html, body, div, ul, li, h1, h2, h3, h4, h5, p, em, i, img, textarea, button {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        em, i {
+            font-style: normal;
+        }
+
+        /*全局样式 start*/
+        html {
+            max-width: 750px;
+            min-width: 320px;
+            margin: 0 auto;
+        }
+
+        body {
+            max-width: 750px;
+            min-width: 320px;
+            margin: 0 auto;
+            font: normal normal 0px/18px;
+            font-family: Arial, 'Microsoft YaHei';
+            background-color: #fff;
+        }
+
+        html, body {
+            min-height: 100%;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .down .m-flash {
+            background-color: #fff;
+            height: 15.92rem;
+        }
+
+        .down .m-flash .m-banner {
+            position: relative;
+            width: 15rem;
+            height: 15.92rem;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .m-banner .ul-flash {
+            width: 400%;
+            overflow: hidden;
+        }
+
+        .m-banner .ul-flash li {
+            position: relative;
+            float: left;
+            width: 25%;
+            height: 15rem;
+        }
+
+        .m-banner .ul-flash li .a_img {
+            display: block;
+            width: 100%;
+            height: 15rem;
+        }
+
+        .m-banner .ul-list {
+            position: absolute;
+            right: 50%;
+            margin-right: -2rem;
+            bottom: 0.3rem;
+            width: 4rem;
+            height: 0.32rem;
+            font-size: 0;
+            text-align: center;
+        }
+
+        .m-banner .ul-list li {
+            display: inline-block;
+            width: 0.32rem;
+            height: 0.32rem;
+            margin-right: 0.2rem;
+            margin-left: 0.2rem;
+            border: 0 none;
+            border-radius: 100%;
+            background-color: #cccaca;
+        }
+
+        .m-banner .ul-list .cur_li {
+            background-color: #cc0244;
+        }
+
+        .m-copy {
+            padding-top: 0.9rem;
+            height: 2.28rem;
+            font-size: 0.1rem;
+            text-align: center;
+        }
+
+        .m-copy .copy-block {
+            position: relative;
+            display: inline-block;
+            box-sizing: border-box;
+            height: 1.48rem;
+            border: 0.04rem solid #2d2c2c;
+            border-radius: 0.75rem;
+            padding-left: 0.56rem;
+            padding-right: 3.5rem;
+            background-size: auto 100%;
+        }
+
+        .m-copy .copy-block .text {
+            float: left;
+            height: 1.48rem;
+            line-height: 1.48rem;
+            font-size: 0.56rem;
+            color: #2d2c2c;
+        }
+
+        .m-copy .copy-block .code {
+            float: left;
+            height: 1.48rem;
+            line-height: 1.48rem;
+            font-size: 0.56rem;
+            color: #2d2c2c;
+            width: 5rem;
+        }
+
+        .m-copy .copy-block .code textarea {
+            display: inline-block;
+            resize: none;
+            box-sizing: border-box;
+            font-size: 0.56rem;
+            height: 1.48rem;
+            line-height: 1.48rem;
+            color: #2d2c2c;
+            text-align: left;
+            background-color: transparent;
+            border: none;
+        }
+
+        .m-copy .copy-block .code span {
+            display: inline-block;
+            box-sizing: border-box;
+            font-size: 0.56rem;
+            line-height: 1.48rem;
+            color: #2d2c2c;
+            text-align: left;
+        }
+
+        .m-copy .copy-block .copy_btn {
+            border: 0 none;
+            border-radius: 0 1.48em 1.48em 0;
+            background: none;
+            position: absolute;
+            top: -0.04rem;
+            right: -0.04rem;
+            width: 3.3rem;
+            height: 1.48rem;
+            background-size: 100% 100%;
+            font-size: 0.56rem;
+            color: #ffffff;
+            text-align: center;
+            line-height: 1.48rem;
+        }
+
+        .m-down {
+            display: block;
+            width: 5.6rem;
+            height: 1.6rem;
+            border: 0 none;
+            border-radius: 0.8rem;
+            background-color: #db1556;
+            margin: 0.8rem auto 0;
+            line-height: 1.6rem;
+            font-size: 0.6rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .m-foot-tips {
+            width: 12.6rem;
+            margin: 1rem auto 0;
+            line-height: 0.6rem;
+            font-size: 0.4rem;
+            color: #4c4c4c;
+        }
+
+        .m-foot-tips i {
+            color: #ff0000;
+        }
+    </style>
+    <script type="text/javascript">
+        (function () {
+            function o() {
+                document.documentElement.style.fontSize = (document.documentElement.clientWidth > 750 ? 750 : document.documentElement.clientWidth) / 15 + "px"
+            }
+
+            var e = null;
+            window.addEventListener("resize", function () {
+                clearTimeout(e), e = setTimeout(o, 300)
+            }, !1), o()
+        })(window);
+    </script>
+    <link rel="stylesheet" href="__API__/Download/layer.css" id="layuicss-skinlayercss">
+</head>
+
+<body id="dom">
+<div class="down">
+    <div class="m-flash">
+        <div class="m-banner">
+            <ul class="ul-flash">
+                <li data-index="3">
+                    <img src="__API__/Download/04.png" width="100%" height="100%">
+                </li>
+                <li data-index="0" class="cur_li" style="margin-left: 0px;">
+                    <img src="__API__/Download/01.png" width="100%" height="100%">
+                </li>
+                <li data-index="1" style="margin-left: 0px;">
+                    <img src="__API__/Download/02.png" width="100%" height="100%">
+                </li>
+                <li data-index="2" style="margin-left: 0px;">
+                    <img src="__API__/Download/03.png" width="100%" height="100%">
+                </li>
+            </ul>
+            <ul class="ul-list">
+                <li class="">
+                </li>
+                <li class="">
+                </li>
+                <li class="">
+                </li>
+                <li class="cur_li">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="m-copy">
+        <div class="copy-block">
+            <div class="text">邀请码：</div>
+            <div class="code">
+                <span id="copytext" style="display:none">{$invite_code}</span>
+                <textarea id="copy_key_android" onfocus="return false" maxlength="0" onkeydown="return false;"
+                          style="ime-mode:disabled" onkeyup="return false;">{$invite_code}</textarea>
+                <div class="copys-input" id="copys-input" style="width:1px; height:1px; overflow:hidden;">
+                    {$invite_code}
+                </div>
+            </div>
+            <button type="button" style="background: none;background: #ff1849;border: 1px solid #ff1849;height: 1.5rem"
+                    class="copy_btn copy_btn_android"
+                    data-clipboard-action="copy"
+                    data-clipboard-target="#copy_key_android" style="">复制邀请码
+            </button>
+            <button type="button" style="background: none;background: #ff1849;border: 1px solid #ff1849;;height: 1.5rem"
+                    class="copy_btn copy_btn_ios"
+                    data-clipboard-action="copy"
+                    data-clipboard-target="#copys-input" style="display: none;">复制邀请码
+            </button>
+        </div>
+    </div>
+    <a href="http://pic.taodianke.com/static/App/zhaimiaosh.apk" class="m-down"
+       style="background-color: #ff1849">
+        APP下载
+    </a>
+    <div class="m-foot-tips">
+        <i>温馨提示：</i>如点击按钮无法下载，可点击右上角【•••】选择在浏览器中打开下载APP
+    </div>
+</div>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/touchjs/0.2.14/touch.min.js"></script>
+<script type="text/javascript" src="__API__/Download/clipboard.min.js"></script>
+<script type="text/javascript" src="__API__/Download/downloadnew.js?v=20180530"></script>
+</body>
+</html>
